@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>NLP Preprocessing Toolkit | Syntactic Terminal</title>
+  <meta name="description" content="High-throughput text sanitization, tokenization, stemming, lemmatization, and real-time frequency analytics."/>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#0b1326",
+            "surface-dim": "#0b1326",
+            "surface-bright": "#31394d",
+            "surface-container-lowest": "#060e20",
+            "surface-container-low": "#131b2e",
+            "surface-container": "#171f33",
+            "surface-container-high": "#222a3d",
+            "surface-container-highest": "#2d3449",
+            "on-surface": "#dae2fd",
+            "on-surface-variant": "#bcc9cd",
+            "primary": "#4cd7f6",
+            "primary-container": "#06b6d4",
+            "on-primary": "#003640",
+            "secondary": "#c0c1ff",
+            "secondary-container": "#3131c0",
+            "tertiary": "#4edea3",
+            "tertiary-container": "#1bbd85",
+            "error": "#ffb4ab",
+            "error-container": "#93000a",
+            "outline": "#869397",
+            "outline-variant": "#3d494c"
+          },
+          fontFamily: {
+            "body": ["Geist", "sans-serif"],
+            "code": ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    @layer base {
+      html, body {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        background-color: #0b1326;
+      }
+      body {
+        overscroll-behavior: none;
+      }
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0b1326;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #222a3d;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #4cd7f6;
+      }
+    }
+    .tab-content {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+    .tab-content.active {
+      display: block;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-surface font-body text-on-surface flex flex-col min-h-screen selection:bg-primary/20 selection:text-primary">
+
+  <!-- Fixed Top Header -->
+  <header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl border-b border-surface-container-high/60 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+    <div class="max-w-5xl mx-auto h-16 px-4 md:px-6 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center border border-primary/30 text-primary shadow-sm flex-shrink-0">
+          <span class="material-symbols-outlined text-[22px]">terminal</span>
+        </div>
+        <div class="flex flex-col min-w-0">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-base md:text-lg tracking-tight text-on-surface truncate">NLP Preprocess</span>
+            <span class="text-[11px] font-code px-2 py-0.5 bg-surface-container-highest text-primary rounded border border-primary/25 font-semibold flex-shrink-0">v1.0 MVP</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+            </span>
+            <span class="text-xs font-code text-on-surface-variant truncate" id="header-active-view">Studio Module Active</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Nav Tabs -->
+      <nav class="hidden md:flex items-center gap-1 bg-surface-container-lowest p-1 rounded-xl border border-surface-container-high">
+        <button class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-code font-semibold flex items-center gap-1.5 transition-all text-primary bg-surface-container-high" data-target="studio">
+          <span class="material-symbols-outlined text-[16px]">terminal</span> Studio
+        </button>
+        <button class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-code font-semibold flex items-center gap-1.5 transition-all text-on-surface-variant hover:text-on-surface" data-target="analytics">
+          <span class="material-symbols-outlined text-[16px]">analytics</span> Analytics
+        </button>
+        <button class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-code font-semibold flex items-center gap-1.5 transition-all text-on-surface-variant hover:text-on-surface" data-target="pipeline">
+          <span class="material-symbols-outlined text-[16px]">tune</span> Pipeline
+        </button>
+        <button class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-code font-semibold flex items-center gap-1.5 transition-all text-on-surface-variant hover:text-on-surface" data-target="roadmap">
+          <span class="material-symbols-outlined text-[16px]">map</span> Roadmap
+        </button>
+      </nav>
+
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <a href="https://github.com" target="_blank" class="w-8 h-8 rounded-lg bg-surface-container-high hover:bg-surface-variant flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-container-high">
+          <span class="material-symbols-outlined text-[18px]">code</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 w-full max-w-5xl mx-auto pt-20 pb-28 px-4 md:px-6">
+
+    <!-- ============================================================== -->
+    <!-- TAB 1: INTERACTIVE STUDIO                                      -->
+    <!-- ============================================================== -->
+    <div id="view-studio" class="tab-content active space-y-6">
+      
+      <!-- Studio Intro -->
+      <section class="flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[22px]">terminal</span>
+            <h2 class="text-xl md:text-2xl font-bold text-on-surface tracking-tight">Interactive Preprocessing Studio</h2>
+          </div>
+          <span class="text-xs font-code px-2.5 py-1 rounded bg-tertiary/15 text-tertiary border border-tertiary/20 font-semibold flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span> Engine Ready
+          </span>
+        </div>
+        <p class="text-sm text-on-surface-variant">
+          High-throughput regex token sanitization with real-time semantic negation preservation.
+        </p>
+
+        <!-- Sample Presets Scroll -->
+        <div class="flex items-center gap-2 overflow-x-auto py-1 pt-2">
+          <button class="sample-chip flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors whitespace-nowrap text-xs font-code border border-surface-container-highest active:scale-95" id="sample-social">
+            <span class="material-symbols-outlined text-[15px] text-primary">chat</span>
+            <span>Social Tweet</span>
+          </button>
+          <button class="sample-chip flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-variant transition-colors whitespace-nowrap text-xs font-code border border-surface-container-high active:scale-95" id="sample-review">
+            <span class="material-symbols-outlined text-[15px] text-tertiary">rate_review</span>
+            <span>Product Review</span>
+          </button>
+          <button class="sample-chip flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-variant transition-colors whitespace-nowrap text-xs font-code border border-surface-container-high active:scale-95" id="sample-news">
+            <span class="material-symbols-outlined text-[15px] text-secondary">newspaper</span>
+            <span>News Dispatch</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Raw Input Card -->
+      <section class="flex flex-col bg-surface-container-low rounded-xl border border-surface-container-high overflow-hidden shadow-lg">
+        <div class="flex items-center justify-between px-4 py-2.5 bg-surface-container border-b border-surface-container-high">
+          <div class="flex items-center gap-2">
+            <span class="text-primary font-code font-bold">>_</span>
+            <span class="text-xs font-code uppercase tracking-wider text-on-surface-variant font-semibold">RAW INPUT STREAM</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface hover:text-primary transition-colors text-xs font-code" id="btn-paste">
+              <span class="material-symbols-outlined text-[14px]">content_paste</span>
+              <span>Paste</span>
+            </button>
+            <button class="flex items-center gap-1 px-2 py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-error transition-colors text-xs font-code" id="btn-clear">
+              <span class="material-symbols-outlined text-[14px]">delete_sweep</span>
+              <span>Clear</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="p-4 flex flex-col gap-2">
+          <textarea class="w-full bg-transparent text-on-surface font-code text-sm resize-none outline-none focus:outline-none placeholder-outline/60 min-h-[96px]" id="raw-textarea" placeholder="Enter raw string or copy dataset here...">Hey!!! I am learning NLP @college 😊, and this is AMAZING!!! Visit https://example.com</textarea>
+          
+          <div class="flex items-center justify-between pt-2 border-t border-surface-container-high/40 text-xs">
+            <div class="flex items-center gap-2 font-code">
+              <span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">
+                <span class="text-primary font-bold" id="input-char-count">87</span> chars
+              </span>
+              <span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">
+                <span class="text-tertiary font-bold" id="input-token-count">13</span> tokens
+              </span>
+            </div>
+            <div class="flex items-center gap-1 text-on-surface-variant font-code text-[11px]">
+              <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+              <span>UTF-8 Ingestion Active</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pipeline Transforms Grid -->
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-[20px]">tune</span>
+            <h3 class="text-base font-bold text-on-surface">Configurable Pipeline Transforms</h3>
+          </div>
+          <span class="text-xs font-code text-on-surface-variant" id="active-transforms-count">6/6 Active</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+          <!-- Lowercase -->
+          <label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container border border-surface-container-high transition-colors cursor-pointer select-none">
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                <span class="material-symbols-outlined text-[16px]">match_case</span>
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-on-surface">Convert to Lowercase</div>
+                <div class="text-xs font-code text-on-surface-variant">HELLO → hello</div>
+              </div>
+            </div>
+            <input checked class="accent-primary w-4 h-4 cursor-pointer" id="toggle-lower" type="checkbox"/>
+          </label>
+
+          <!-- Strip URLs -->
+          <label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container border border-surface-container-high transition-colors cursor-pointer select-none">
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                <span class="material-symbols-outlined text-[16px]">link_off</span>
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-on-surface">Strip URLs & Web Links</div>
+                <div class="text-xs font-code text-on-surface-variant">https://... and www....</div>
+              </div>
+            </div>
+            <input checked class="accent-primary w-4 h-4 cursor-pointer" id="toggle-urls" type="checkbox"/>
+          </label>
+
+          <!-- Punctuation -->
+          <label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container border border-surface-container-high transition-colors cursor-pointer select-none">
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                <span class="material-symbols-outlined text-[16px]">ink_eraser</span>
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-on-surface">Remove Punctuation</div>
+                <div class="text-xs font-code text-on-surface-variant">Strip !, ?, ., commas, dashes</div>
+              </div>
+            </div>
+            <input checked class="accent-primary w-4 h-4 cursor-pointer" id="toggle-punct" type="checkbox"/>
+          </label>
+
+          <!-- Symbols & Emojis -->
+          <label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container border border-surface-container-high transition-colors cursor-pointer select-none">
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                <span class="material-symbols-outlined text-[16px]">mood_bad</span>
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-on-surface">Remove Symbols & Emojis</div>
+                <div class="text-xs font-code text-on-surface-variant">@mentions, #tags, unicode 😊</div>
+              </div>
+            </div>
+            <input checked class="accent-primary w-4 h-4 cursor-pointer" id="toggle-symbols" type="checkbox"/>
+          </label>
+
+          <!-- Stop Words -->
+          <label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container border border-surface-container-high transition-colors cursor-pointer select-none">
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded bg-secondary/15 flex items-center justify-center text-secondary flex-shrink-0">
+                <span class="material-symbols-outlined text-[16px]">filter_alt</span>
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-on-surface">Filter Stop Words</div>
+                <div class="text-xs font-code text-on-surface-variant">NLTK Standard: is, am, the, this</div>
+              </div>
+            </div>
+            <input checked class="accent-primary w-4 h-4 cursor-pointer" id="toggle-stopwords" type="checkbox"/>
+          </label>
+
+          <!-- Smart Negation Guard -->
+          <label class="flex items-center justify-between p-3 rounded-lg bg-surface-container hover:bg-surface-container-high border border-tertiary/30 transition-colors cursor-pointer select-none">
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded bg-tertiary/20 flex items-center justify-center text-tertiary flex-shrink-0">
+                <span class="material-symbols-outlined text-[16px]">shield</span>
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-on-surface flex items-center gap-1.5">
+                  <span>Preserve Negations</span>
+                  <span class="text-[9px] font-code px-1.5 py-0.2 bg-tertiary/20 text-tertiary rounded font-bold">SMART GUARD</span>
+                </div>
+                <div class="text-xs font-code text-on-surface-variant">Keep 'not', 'no', 'never' for sentiment</div>
+              </div>
+            </div>
+            <input checked class="accent-tertiary w-4 h-4 cursor-pointer" id="toggle-negation" type="checkbox"/>
+          </label>
+        </div>
+      </section>
+
+      <!-- Action Button -->
+      <div>
+        <button class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-primary text-on-primary font-bold text-base shadow-lg shadow-primary/20 hover:opacity-95 active:scale-[0.99] transition-all" id="btn-process">
+          <span class="material-symbols-outlined text-[20px]">bolt</span>
+          <span>Execute Preprocessing Pipeline</span>
+        </button>
+      </div>
+
+      <!-- Output Payload Section -->
+      <section class="flex flex-col bg-surface-container-low rounded-xl border border-surface-container-high overflow-hidden shadow-lg">
+        <div class="flex items-center justify-between px-4 py-2.5 bg-surface-container border-b border-surface-container-high">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-tertiary text-[18px]">verified</span>
+            <span class="text-xs font-code uppercase tracking-wider text-on-surface font-bold">Sanitized Payload</span>
+          </div>
+          <div class="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary/15 text-tertiary text-xs font-code font-bold">
+            <span class="material-symbols-outlined text-[13px]">trending_down</span>
+            <span id="noise-reduction-stat">-64% Noise</span>
+          </div>
+        </div>
+
+        <div class="p-4 flex flex-col gap-3">
+          <div class="p-3.5 rounded-lg bg-surface-container font-code text-sm text-primary break-words border border-surface-container-high/60" id="output-text-box">
+            hey learning nlp college amazing visit
+          </div>
+
+          <!-- Quick Metrics Bar -->
+          <div class="grid grid-cols-3 gap-2">
+            <div class="flex flex-col p-2.5 rounded-lg bg-surface-container border border-surface-container-high text-center">
+              <span class="text-[11px] font-code text-on-surface-variant">Tokens Kept</span>
+              <span class="text-xl font-code font-bold text-tertiary" id="stat-tokens-kept">6</span>
+            </div>
+            <div class="flex flex-col p-2.5 rounded-lg bg-surface-container border border-surface-container-high text-center">
+              <span class="text-[11px] font-code text-on-surface-variant">Removed</span>
+              <span class="text-xl font-code font-bold text-error" id="stat-tokens-dropped">7</span>
+            </div>
+            <div class="flex flex-col p-2.5 rounded-lg bg-surface-container border border-surface-container-high text-center">
+              <span class="text-[11px] font-code text-on-surface-variant">Compression</span>
+              <span class="text-xl font-code font-bold text-primary" id="stat-compression">2.8x</span>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="grid grid-cols-3 gap-2 pt-1">
+            <button class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-code active:scale-95 transition-all" id="btn-copy">
+              <span class="material-symbols-outlined text-[15px] text-primary">content_copy</span>
+              <span>Copy</span>
+            </button>
+            <button class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-code active:scale-95 transition-all" id="btn-download">
+              <span class="material-symbols-outlined text-[15px] text-tertiary">download</span>
+              <span>Export</span>
+            </button>
+            <button class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-code active:scale-95 transition-all" id="btn-switch-analytics">
+              <span class="material-symbols-outlined text-[15px] text-secondary">analytics</span>
+              <span>Analyze</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Token Chips Stream -->
+      <section class="space-y-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[18px]">data_array</span>
+            <span class="text-sm font-bold text-on-surface">Interactive Token Stream</span>
+          </div>
+          <span class="text-xs font-code text-on-surface-variant">Click token to inspect</span>
+        </div>
+        <div class="flex items-center gap-2 overflow-x-auto py-2" id="token-stream-container">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- ============================================================== -->
+    <!-- TAB 2: TEXT ANALYTICS & FREQUENCY                              -->
+    <!-- ============================================================== -->
+    <div id="view-analytics" class="tab-content space-y-6">
+
+      <!-- Status Context -->
+      <div class="flex items-center justify-between bg-surface-container-low px-4 py-3 rounded-xl border border-surface-container-high">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="w-2.5 h-2.5 rounded-full bg-tertiary shadow-[0_0_8px_rgba(78,222,163,0.7)] flex-shrink-0"></span>
+          <div class="flex flex-col min-w-0">
+            <span class="text-xs font-code text-tertiary uppercase tracking-wider font-bold">Execution Synced with Studio</span>
+            <span class="text-xs font-code text-on-surface-variant truncate">Session #NLP-9048-X2</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 bg-surface-container px-3 py-1 rounded-full border border-surface-container-high">
+          <span class="material-symbols-outlined text-[14px] text-primary">timer</span>
+          <span class="text-xs font-code text-primary font-bold">12.4ms</span>
+        </div>
+      </div>
+
+      <!-- 2x2 Bento Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <!-- Stat 1 -->
+        <div class="bg-surface-container rounded-xl p-3.5 flex flex-col justify-between border border-surface-container-high">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-code text-on-surface-variant uppercase tracking-wider">Raw Words</span>
+            <span class="material-symbols-outlined text-primary text-[18px]">notes</span>
+          </div>
+          <div class="mt-3">
+            <div class="text-2xl font-code font-bold text-on-surface" id="analytics-raw-words">14</div>
+            <span class="text-xs text-on-surface-variant">Tokens parsed</span>
+          </div>
+        </div>
+
+        <!-- Stat 2 -->
+        <div class="bg-surface-container rounded-xl p-3.5 flex flex-col justify-between border border-surface-container-high">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-code text-on-surface-variant uppercase tracking-wider">Clean Tokens</span>
+            <span class="bg-primary/20 text-primary text-[10px] font-code px-1.5 py-0.5 rounded-full font-bold" id="analytics-reduction-badge">-57.1%</span>
+          </div>
+          <div class="mt-3">
+            <div class="text-2xl font-code font-bold text-primary" id="analytics-clean-tokens">6</div>
+            <span class="text-xs text-tertiary">Normalized state</span>
+          </div>
+        </div>
+
+        <!-- Stat 3 -->
+        <div class="bg-surface-container rounded-xl p-3.5 flex flex-col justify-between border border-surface-container-high">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-code text-on-surface-variant uppercase tracking-wider">Pruned Noise</span>
+            <span class="material-symbols-outlined text-secondary text-[18px]">cleaning_services</span>
+          </div>
+          <div class="mt-3">
+            <div class="text-2xl font-code font-bold text-secondary" id="analytics-pruned-chars">48 <span class="text-xs text-on-surface-variant">chars</span></div>
+            <span class="text-xs text-on-surface-variant">Noise filtered</span>
+          </div>
+        </div>
+
+        <!-- Stat 4 -->
+        <div class="bg-surface-container rounded-xl p-3.5 flex flex-col justify-between border border-surface-container-high">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-code text-on-surface-variant uppercase tracking-wider">Lexical TTR</span>
+            <span class="material-symbols-outlined text-tertiary text-[18px]">donut_small</span>
+          </div>
+          <div class="mt-3">
+            <div class="text-2xl font-code font-bold text-tertiary" id="analytics-ttr">1.00</div>
+            <span class="text-xs text-tertiary font-medium">Type-Token Ratio</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Frequency Bar Inspector -->
+      <section class="bg-surface-container rounded-xl p-4 border border-surface-container-high space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[20px]">bar_chart</span>
+            <h3 class="text-base font-bold text-on-surface">Top Term Frequencies</h3>
+          </div>
+          <span class="text-[11px] font-code text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full">Lemmatized Distribution</span>
+        </div>
+        <p class="text-xs text-on-surface-variant">
+          Calculated distribution across sanitized token sequences. Tap a term for frequency inspection.
+        </p>
+
+        <div class="space-y-2 pt-1" id="analytics-freq-bars">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Hapax Legomena Tray -->
+        <div class="pt-3 border-t border-surface-container-high/60">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-code text-on-surface-variant uppercase tracking-wider">Hapax Legomena (Freq: 1)</span>
+            <span class="text-xs font-code text-tertiary" id="analytics-hapax-count">5 terms</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5" id="analytics-hapax-tray">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Noise Pruning Audit Breakdown -->
+      <section class="bg-surface-container rounded-xl p-4 border border-surface-container-high space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-[20px]">filter_alt</span>
+            <h3 class="text-base font-bold text-on-surface">Noise Pruning Audit</h3>
+          </div>
+          <span class="text-[11px] font-code text-secondary bg-secondary-container/20 px-2 py-0.5 rounded-full">4 Pipeline Passes</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+          <!-- Stopwords -->
+          <div class="bg-surface-container-low rounded-lg p-3 border border-surface-container-high space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-on-surface flex items-center gap-1">
+                <span class="material-symbols-outlined text-[15px] text-tertiary">visibility_off</span> Stopwords
+              </span>
+              <span class="text-[10px] font-code text-tertiary bg-tertiary/10 px-1.5 py-0.5 rounded" id="audit-stop-count">4 items</span>
+            </div>
+            <div class="flex flex-wrap gap-1" id="audit-stop-chips">
+              <span class="text-xs font-code bg-surface-container-high text-on-surface-variant px-1.5 py-0.5 rounded">"i"</span>
+              <span class="text-xs font-code bg-surface-container-high text-on-surface-variant px-1.5 py-0.5 rounded">"am"</span>
+              <span class="text-xs font-code bg-surface-container-high text-on-surface-variant px-1.5 py-0.5 rounded">"and"</span>
+              <span class="text-xs font-code bg-surface-container-high text-on-surface-variant px-1.5 py-0.5 rounded">"this"</span>
+            </div>
+          </div>
+
+          <!-- Punctuation -->
+          <div class="bg-surface-container-low rounded-lg p-3 border border-surface-container-high space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-on-surface flex items-center gap-1">
+                <span class="material-symbols-outlined text-[15px] text-primary">code_blocks</span> Punctuation
+              </span>
+              <span class="text-[10px] font-code text-primary bg-primary/10 px-1.5 py-0.5 rounded" id="audit-punct-count">6 marks</span>
+            </div>
+            <div class="flex flex-wrap gap-1" id="audit-punct-chips">
+              <span class="text-xs font-code bg-surface-container-high text-primary px-1.5 py-0.5 rounded font-bold">"!"</span>
+              <span class="text-xs font-code bg-surface-container-high text-primary px-1.5 py-0.5 rounded font-bold">"@"</span>
+              <span class="text-xs font-code bg-surface-container-high text-primary px-1.5 py-0.5 rounded font-bold">","</span>
+            </div>
+          </div>
+
+          <!-- URLs -->
+          <div class="bg-surface-container-low rounded-lg p-3 border border-surface-container-high space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-on-surface flex items-center gap-1">
+                <span class="material-symbols-outlined text-[15px] text-secondary">link_off</span> URLs
+              </span>
+              <span class="text-[10px] font-code text-secondary bg-secondary/15 px-1.5 py-0.5 rounded" id="audit-url-count">1 link</span>
+            </div>
+            <div class="text-xs font-code text-on-surface-variant truncate" id="audit-url-chips">
+              https://example.com
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CSV Upload Button Action -->
+      <div class="pt-1">
+        <label class="w-full bg-primary hover:bg-primary-container text-on-primary py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm active:scale-[0.99]">
+          <span class="material-symbols-outlined text-[18px]">upload_file</span>
+          <span>Upload CSV / Dataset for Batch Frequency Analysis</span>
+          <input type="file" accept=".csv,.txt" id="analytics-file-input" class="hidden"/>
+        </label>
+      </div>
+
+    </div>
+
+
+    <!-- ============================================================== -->
+    <!-- TAB 3: NLP PIPELINE & MORPHOLOGY                               -->
+    <!-- ============================================================== -->
+    <div id="view-pipeline" class="tab-content space-y-6">
+
+      <!-- Header -->
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+          <span class="text-xs font-code text-primary uppercase tracking-wider font-bold">Engine: NLTK Core v3.9</span>
+        </div>
+        <span class="text-xs font-code text-tertiary bg-surface-container px-2 py-0.5 rounded-full flex items-center gap-1 border border-surface-container-high">
+          <span class="material-symbols-outlined text-[14px]">check_circle</span> Active Graph
+        </span>
+      </div>
+
+      <!-- Hero Banner -->
+      <div class="p-5 rounded-xl bg-gradient-to-r from-surface-container via-surface-container to-surface-container-high border border-surface-container-high relative overflow-hidden">
+        <div class="relative z-10 flex flex-col gap-1 max-w-xl">
+          <span class="text-[11px] font-code text-primary uppercase font-bold">Pipeline Telemetry</span>
+          <h2 class="text-xl md:text-2xl font-bold text-on-surface">Morphological Vectorizer</h2>
+          <p class="text-xs md:text-sm text-on-surface-variant mt-1">
+            Preserving semantic integrity via WordNet Lemmatization over aggressive rule-based Porter cuts.
+          </p>
+        </div>
+      </div>
+
+      <!-- 5-Stage Execution Graph -->
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-code text-on-surface flex items-center gap-1.5 font-bold">
+            <span class="material-symbols-outlined text-primary text-[18px]">account_tree</span>
+            Execution Graph (5 Stages)
+          </span>
+          <span class="text-[11px] font-code text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded">Deterministic Flow</span>
+        </div>
+
+        <div class="bg-surface-container rounded-xl p-3.5 border border-surface-container-high space-y-2">
+          
+          <div class="flex items-center gap-3 p-2.5 bg-surface-container-low rounded-lg border border-surface-container-high/40">
+            <div class="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-code font-bold">1</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-xs font-code font-bold text-on-surface">Raw Text Stream</div>
+              <div class="text-[11px] text-on-surface-variant">UTF-8 normalization & string buffer intake</div>
+            </div>
+            <span class="text-[10px] font-code px-1.5 py-0.5 rounded bg-primary/10 text-primary">Input</span>
+          </div>
+
+          <div class="flex justify-center -my-1 text-on-surface-variant/40">
+            <span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+          </div>
+
+          <div class="flex items-center gap-3 p-2.5 bg-surface-container-low rounded-lg border border-surface-container-high/40">
+            <div class="w-6 h-6 rounded-full bg-secondary/20 text-secondary flex items-center justify-center text-xs font-code font-bold">2</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-xs font-code font-bold text-on-surface">Regex Sanitation</div>
+              <div class="text-[11px] text-on-surface-variant">Eliminates URLs & non-alphanumeric noise</div>
+            </div>
+            <span class="text-[10px] font-code px-1.5 py-0.5 rounded bg-secondary/15 text-secondary">Cleanse</span>
+          </div>
+
+          <div class="flex justify-center -my-1 text-on-surface-variant/40">
+            <span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+          </div>
+
+          <div class="flex items-center gap-3 p-2.5 bg-surface-container-low rounded-lg border border-surface-container-high/40">
+            <div class="w-6 h-6 rounded-full bg-tertiary/20 text-tertiary flex items-center justify-center text-xs font-code font-bold">3</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-xs font-code font-bold text-on-surface">WordPunct Tokenizer</div>
+              <div class="text-[11px] text-on-surface-variant">Splits tokens on word boundaries</div>
+            </div>
+            <span class="text-[10px] font-code px-1.5 py-0.5 rounded bg-tertiary/15 text-tertiary">Lexical</span>
+          </div>
+
+          <div class="flex justify-center -my-1 text-on-surface-variant/40">
+            <span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+          </div>
+
+          <div class="flex items-center gap-3 p-2.5 bg-surface-container-low rounded-lg border border-surface-container-high/40">
+            <div class="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-code font-bold">4</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-xs font-code font-bold text-on-surface">Stop-Word & Negation Guard</div>
+              <div class="text-[11px] text-on-surface-variant">Prunes stop list; locks 'not', 'no', 'never'</div>
+            </div>
+            <span class="text-[10px] font-code px-1.5 py-0.5 rounded bg-primary/10 text-primary">Filter</span>
+          </div>
+
+          <div class="flex justify-center -my-1 text-on-surface-variant/40">
+            <span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+          </div>
+
+          <div class="flex items-center gap-3 p-2.5 bg-surface-container-high rounded-lg border border-primary/30 shadow-sm">
+            <div class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-code font-bold">5</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-xs font-code font-bold text-primary">Morphological Reduction</div>
+              <div class="text-[11px] text-on-surface-variant">Dual-mode derivation: Porter Stemmer vs WordNet Lemmatizer</div>
+            </div>
+            <span class="text-[10px] font-code px-1.5 py-0.5 rounded bg-primary text-on-primary font-bold">Target</span>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Stemmer vs Lemmatizer A/B Dissector -->
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-[20px]">compare</span>
+            <h3 class="text-base font-bold text-on-surface">Stemmer vs Lemmatizer A/B Dissector</h3>
+          </div>
+          <span class="text-[11px] font-code text-secondary bg-secondary-container/40 px-2 py-0.5 rounded">Dissector</span>
+        </div>
+        <p class="text-xs text-on-surface-variant">Tap test tokens below to observe structural differences.</p>
+
+        <div class="flex items-center gap-2 overflow-x-auto py-1" id="pipeline-token-chips">
+          <button class="token-choice-btn px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-code text-xs flex items-center gap-1.5 whitespace-nowrap border border-primary/40" data-word="studies" data-stem="studi" data-lemma="study" data-pos="NOUN" data-analysis="Porter truncates 'ies' crudely to non-word 'studi'. Lemmatizer resolves correct base.">
+            <span class="w-1.5 h-1.5 rounded-full bg-error"></span> studies
+          </button>
+          <button class="token-choice-btn px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant font-code text-xs flex items-center gap-1.5 whitespace-nowrap border border-surface-container-high" data-word="learning" data-stem="learn" data-lemma="learn" data-pos="VERB" data-analysis="Both algorithms successfully identify root 'learn'. Regular suffixes map cleanly.">
+            <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> learning
+          </button>
+          <button class="token-choice-btn px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant font-code text-xs flex items-center gap-1.5 whitespace-nowrap border border-surface-container-high" data-word="better" data-stem="better" data-lemma="good" data-pos="ADJ" data-analysis="Porter has no POS context. WordNet cross-references irregular comparative lookup.">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span> better
+          </button>
+          <button class="token-choice-btn px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant font-code text-xs flex items-center gap-1.5 whitespace-nowrap border border-surface-container-high" data-word="corpora" data-stem="corpora" data-lemma="corpus" data-pos="NOUN" data-analysis="Stemmer fails on Latin plural inflection. Lemma maps to singular lemma.">
+            <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> corpora
+          </button>
+        </div>
+
+        <!-- Comparative Card -->
+        <div class="bg-surface-container rounded-xl p-4 border border-surface-container-high space-y-3">
+          <div class="flex items-center justify-between pb-2 bg-surface-container-low px-3 py-2 rounded-lg border border-surface-container-high/40">
+            <div>
+              <span class="text-[10px] font-code text-on-surface-variant uppercase">Input Token</span>
+              <div class="text-lg font-code font-bold text-primary" id="disp-active-token">studies</div>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] font-code text-on-surface-variant uppercase">POS Tag</span>
+              <div class="text-xs font-code text-tertiary bg-surface-container-high px-2 py-0.5 rounded font-bold" id="disp-active-pos">NOUN</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <!-- Porter -->
+            <div class="flex flex-col p-3 bg-surface-container-low rounded-lg border border-surface-container-high">
+              <span class="text-xs font-code font-bold text-secondary">Porter Stemmer</span>
+              <span class="text-[11px] text-on-surface-variant">Heuristic Suffix Slicing</span>
+              <div class="mt-2 p-2 bg-surface-container rounded flex items-center justify-between">
+                <span class="text-base font-code text-on-surface" id="disp-stem-output">studi</span>
+                <span class="text-[10px] font-code px-1.5 py-0.5 rounded text-error bg-error/20" id="disp-stem-validity">Non-Word</span>
+              </div>
+            </div>
+
+            <!-- WordNet -->
+            <div class="flex flex-col p-3 bg-surface-container-high rounded-lg border border-primary/20 shadow-sm">
+              <span class="text-xs font-code font-bold text-primary">WordNet Lemma</span>
+              <span class="text-[11px] text-on-surface-variant">Morphological Lookup</span>
+              <div class="mt-2 p-2 bg-surface-container-lowest rounded flex items-center justify-between">
+                <span class="text-base font-code font-bold text-primary" id="disp-lemma-output">study</span>
+                <span class="text-[10px] font-code px-1.5 py-0.5 rounded text-tertiary bg-tertiary/20">Lemma Root</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3 bg-surface-container-lowest rounded-lg border border-surface-container-high/40 text-xs text-on-surface-variant" id="disp-analysis-text">
+            Porter truncates 'ies' crudely to non-word 'studi'. Lemmatizer resolves correct base.
+          </div>
+        </div>
+      </section>
+
+      <!-- Custom Stop Words Manager -->
+      <section class="bg-surface-container rounded-xl p-4 border border-surface-container-high space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-tertiary text-[20px]">filter_alt</span>
+            <h3 class="text-base font-bold text-on-surface">Custom Stop Words Filter</h3>
+          </div>
+          <span class="text-xs font-code text-tertiary bg-surface-container-high px-2 py-0.5 rounded font-bold" id="stop-counter">8 Active</span>
+        </div>
+
+        <form class="flex gap-2 items-center" id="custom-stop-form">
+          <div class="relative flex-1">
+            <span class="absolute left-3 top-2.5 font-code text-xs text-outline">>_</span>
+            <input class="w-full pl-8 pr-3 py-2 bg-surface-container-lowest text-on-surface font-code text-xs rounded-lg border border-surface-container-high focus:outline-none focus:border-primary" id="stop-input" placeholder="Add word (e.g. semester, exam)..." type="text"/>
+          </div>
+          <button class="px-4 py-2 bg-primary text-on-primary font-code text-xs rounded-lg font-bold flex items-center gap-1 active:scale-95 transition-transform" type="submit">
+            <span class="material-symbols-outlined text-[15px]">add</span> Add
+          </button>
+        </form>
+
+        <div class="flex flex-wrap gap-1.5 pt-1" id="stop-words-container">
+          <!-- Populated with stop words -->
+        </div>
+
+        <div class="flex items-center justify-between pt-1 text-xs text-on-surface-variant font-code">
+          <span class="text-tertiary flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">lock</span> Preserved negations: 5 tokens
+          </span>
+          <button type="button" class="text-primary hover:underline" id="btn-reset-stops">Restore Defaults</button>
+        </div>
+      </section>
+
+      <!-- Python Code Snippet -->
+      <section class="bg-surface-container rounded-xl border border-surface-container-high overflow-hidden shadow-lg">
+        <div class="bg-surface-container-high px-4 py-2.5 flex items-center justify-between border-b border-surface-container-highest">
+          <div class="flex items-center gap-2">
+            <div class="flex gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-error/70"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-primary/70"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-tertiary/70"></span>
+            </div>
+            <span class="text-xs font-code font-bold text-on-surface ml-1">nlp_pipeline.py</span>
+          </div>
+          <button class="text-xs font-code text-primary bg-surface-container px-2.5 py-1 rounded hover:bg-surface-container-highest transition-colors flex items-center gap-1" id="btn-copy-py">
+            <span class="material-symbols-outlined text-[14px]">content_copy</span>
+            <span id="copy-py-label">Copy Code</span>
+          </button>
+        </div>
+        <div class="p-4 bg-surface-container-lowest overflow-x-auto">
+          <pre class="text-xs font-code text-on-surface-variant leading-relaxed"><code id="py-code-block">import re
+import nltk
+from nltk.tokenize import WordPunctTokenizer
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+
+nltk.download('stopwords', quiet=True)
+nltk.download('wordnet', quiet=True)
+
+class NLPPipeline:
+    def __init__(self, custom_stops=None):
+        self.tokenizer = WordPunctTokenizer()
+        self.stemmer = PorterStemmer()
+        self.lemmatizer = WordNetLemmatizer()
+        
+        # Preserve context negations for sentiment analysis
+        negations = {'not', 'nor', 'neither', 'never', 'no'}
+        base_stops = set(stopwords.words('english')) - negations
+        if custom_stops:
+            base_stops.update(custom_stops)
+        self.stop_words = base_stops
+
+    def clean_regex(self, text: str) -> str:
+        text = re.sub(r'https?://\S+', '', text)
+        text = re.sub(r'[^a-zA-Z\s]', ' ', text)
+        return text.lower().strip()
+
+    def process(self, raw_text: str, use_lemmatizer=True):
+        clean = self.clean_regex(raw_text)
+        tokens = self.tokenizer.tokenize(clean)
+        filtered = [t for t in tokens if t not in self.stop_words]
+        if use_lemmatizer:
+            return [self.lemmatizer.lemmatize(t) for t in filtered]
+        return [self.stemmer.stem(t) for t in filtered]</code></pre>
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- ============================================================== -->
+    <!-- TAB 4: PROJECT ROADMAP & VIVA                                  -->
+    <!-- ============================================================== -->
+    <div id="view-roadmap" class="tab-content space-y-6">
+
+      <!-- Milestone Banner -->
+      <section class="p-5 rounded-xl bg-surface-container border border-surface-container-high relative overflow-hidden shadow-md">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-tertiary text-[20px]">verified</span>
+            <span class="text-xs font-code text-tertiary tracking-wider uppercase font-bold">Project Readiness Tracker</span>
+          </div>
+          <span class="text-xl font-code font-bold text-primary">83%</span>
+        </div>
+        <h2 class="text-xl font-bold text-on-surface mb-1">MVP Completion Milestone</h2>
+        <p class="text-xs text-on-surface-variant mb-4">5 of 6 phases successfully validated for Final Academic Viva Review.</p>
+
+        <!-- Progress Bar -->
+        <div class="w-full h-2.5 rounded-full bg-surface-container-high overflow-hidden p-0.5 border border-surface-container-highest">
+          <div class="h-full rounded-full bg-gradient-to-r from-tertiary to-primary transition-all duration-1000" style="width: 83.33%;"></div>
+        </div>
+
+        <div class="flex justify-between items-center mt-3 text-xs font-code">
+          <span class="text-tertiary flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-tertiary"></span> 5 Completed</span>
+          <span class="text-primary flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> 1 Active Sprint</span>
+          <span class="text-on-surface-variant flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-on-surface-variant/40"></span> 1 Final Viva</span>
+        </div>
+      </section>
+
+      <!-- 7-Day Sprint Timeline -->
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[20px]">calendar_month</span>
+            <h3 class="text-base font-bold text-on-surface">7-Day Sprint Timeline</h3>
+          </div>
+          <span class="text-xs font-code text-on-surface-variant">Day 6 of 7</span>
+        </div>
+
+        <div class="space-y-2">
+          <!-- Day 1 -->
+          <div class="p-3.5 rounded-xl bg-surface-container border border-surface-container-high flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-tertiary/20 text-tertiary flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-[15px]">check</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-code text-tertiary font-bold">DAY 01 • VERIFIED</span>
+                <span class="text-xs font-code text-on-surface-variant">Setup</span>
+              </div>
+              <div class="text-sm font-semibold text-on-surface">Environment & Setup</div>
+              <div class="text-xs text-on-surface-variant mt-0.5">Python virtualenv, NLTK corpora download, Streamlit configuration.</div>
+            </div>
+          </div>
+
+          <!-- Day 2 -->
+          <div class="p-3.5 rounded-xl bg-surface-container border border-surface-container-high flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-tertiary/20 text-tertiary flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-[15px]">check</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-code text-tertiary font-bold">DAY 02 • VERIFIED</span>
+                <span class="text-xs font-code text-on-surface-variant">Core Engine</span>
+              </div>
+              <div class="text-sm font-semibold text-on-surface">Preprocessing Engine (preprocessing.py)</div>
+              <div class="text-xs text-on-surface-variant mt-0.5">Tokenizers, stopword pruners, Porter stemmer, and lemmatizer.</div>
+            </div>
+          </div>
+
+          <!-- Day 3 -->
+          <div class="p-3.5 rounded-xl bg-surface-container border border-surface-container-high flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-tertiary/20 text-tertiary flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-[15px]">check</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-code text-tertiary font-bold">DAY 03 • VERIFIED</span>
+                <span class="text-xs font-code text-on-surface-variant">Architecture</span>
+              </div>
+              <div class="text-sm font-semibold text-on-surface">Streamlit UI & State Management (app.py)</div>
+              <div class="text-xs text-on-surface-variant mt-0.5">Session state synchronization across transforms and real-time inspector cards.</div>
+            </div>
+          </div>
+
+          <!-- Day 4 -->
+          <div class="p-3.5 rounded-xl bg-surface-container border border-surface-container-high flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-tertiary/20 text-tertiary flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-[15px]">check</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-code text-tertiary font-bold">DAY 04 • VERIFIED</span>
+                <span class="text-xs font-code text-on-surface-variant">Analytics</span>
+              </div>
+              <div class="text-sm font-semibold text-on-surface">Statistics & Frequency Plots (analytics.py)</div>
+              <div class="text-xs text-on-surface-variant mt-0.5">Token distribution histograms, lexical diversity index, and Zipf curve fits.</div>
+            </div>
+          </div>
+
+          <!-- Day 5 -->
+          <div class="p-3.5 rounded-xl bg-surface-container border border-surface-container-high flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-tertiary/20 text-tertiary flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-[15px]">check</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-code text-tertiary font-bold">DAY 05 • VERIFIED</span>
+                <span class="text-xs font-code text-on-surface-variant">Robustness</span>
+              </div>
+              <div class="text-sm font-semibold text-on-surface">Edge-Case Ingestion Testing</div>
+              <div class="text-xs text-on-surface-variant mt-0.5">Escaped emoticons, contraction preservation, and sanitized raw URLs.</div>
+            </div>
+          </div>
+
+          <!-- Day 6 (Active) -->
+          <div class="p-3.5 rounded-xl bg-surface-container-high border border-primary/40 flex items-start gap-3 shadow-sm">
+            <div class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-[15px] animate-spin">sync</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-code text-primary font-bold">DAY 06 • IN PROGRESS</span>
+                <span class="text-xs font-code text-primary">Active Sprint</span>
+              </div>
+              <div class="text-sm font-bold text-on-surface">UI Polish & Unit Benchmark Suite</div>
+              <div class="text-xs text-on-surface-variant mt-0.5">Pre-packaged curated test payloads: Medical, Social Tweets & Legal texts.</div>
+            </div>
+          </div>
+
+          <!-- Day 7 -->
+          <div class="p-3.5 rounded-xl bg-surface-container-low border border-surface-container-high flex items-start gap-3 opacity-70">
+            <div class="w-6 h-6 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-[15px]">schedule</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-code text-on-surface-variant">DAY 07 • UPCOMING</span>
+                <span class="text-xs font-code text-on-surface-variant">Defense</span>
+              </div>
+              <div class="text-sm font-semibold text-on-surface">Report, Slides & Viva Demo</div>
+              <div class="text-xs text-on-surface-variant mt-0.5">LaTeX project summary compilation and slide deck for external jury inspection.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Viva Defense Checklist -->
+      <section class="p-5 rounded-xl bg-surface-container border border-surface-container-high space-y-3 shadow-md">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[20px]">fact_check</span>
+            <h3 class="text-base font-bold text-on-surface">Viva Defense Checklist</h3>
+          </div>
+          <span class="text-xs font-code bg-tertiary/20 text-tertiary px-2 py-0.5 rounded font-bold">Defense Ready</span>
+        </div>
+        <p class="text-xs text-on-surface-variant">Must-pass edge tests professors evaluate during oral live demonstrations.</p>
+
+        <div class="space-y-2">
+          <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-surface-container-high border border-surface-container-highest cursor-pointer hover:bg-surface-variant transition-colors">
+            <input checked class="mt-0.5 w-4 h-4 accent-primary cursor-pointer" type="checkbox"/>
+            <div class="flex-1 text-xs">
+              <span class="font-bold text-on-surface block">Negation Retention Handling</span>
+              <span class="text-on-surface-variant">Stopword filter preserves <code class="text-primary font-code">not</code>, <code class="text-primary font-code">no</code>, <code class="text-primary font-code">never</code> for sentiment integrity.</span>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-surface-container-high border border-surface-container-highest cursor-pointer hover:bg-surface-variant transition-colors">
+            <input checked class="mt-0.5 w-4 h-4 accent-primary cursor-pointer" type="checkbox"/>
+            <div class="flex-1 text-xs">
+              <span class="font-bold text-on-surface block">Graceful Empty Input Response</span>
+              <span class="text-on-surface-variant">Zero-length string returns friendly status without crashing.</span>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-surface-container-high border border-surface-container-highest cursor-pointer hover:bg-surface-variant transition-colors">
+            <input checked class="mt-0.5 w-4 h-4 accent-primary cursor-pointer" type="checkbox"/>
+            <div class="flex-1 text-xs">
+              <span class="font-bold text-on-surface block">Non-English Unicode Sanitation</span>
+              <span class="text-on-surface-variant">Emojis, symbols, and pictographs sanitized cleanly via regex.</span>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-surface-container-high border border-surface-container-highest cursor-pointer hover:bg-surface-variant transition-colors">
+            <input checked class="mt-0.5 w-4 h-4 accent-primary cursor-pointer" type="checkbox"/>
+            <div class="flex-1 text-xs">
+              <span class="font-bold text-on-surface block">URL Prioritized Execution Ordering</span>
+              <span class="text-on-surface-variant">Complete HTTP/HTTPS links removed prior to punctuation splitting.</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="pt-2 flex flex-col md:flex-row gap-2">
+          <button class="flex-1 h-10 px-4 rounded-lg bg-primary text-on-primary text-xs font-code font-bold flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-transform" id="btn-export-pdf">
+            <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+            <span>Download Defense Report (PDF)</span>
+          </button>
+          <button class="flex-1 h-10 px-4 rounded-lg bg-surface-container-high text-on-surface text-xs font-code font-semibold flex items-center justify-center gap-1.5 hover:bg-surface-container-highest active:scale-95 transition-transform border border-surface-container-highest" id="btn-export-md">
+            <span class="material-symbols-outlined text-[16px]">markdown</span>
+            <span>Export Viva Notes & PPT (.MD)</span>
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Fixed Bottom Navigation (Mobile & Quick Dock) -->
+  <nav class="fixed bottom-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-xl border-t border-surface-container-high shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
+    <div class="max-w-md mx-auto flex justify-around items-center h-16 px-2">
+      <button class="bottom-nav-btn flex flex-col items-center justify-center flex-1 h-full text-primary border-t-2 border-primary transition-colors" data-target="studio">
+        <span class="material-symbols-outlined text-[20px]">terminal</span>
+        <span class="text-[11px] font-code mt-0.5 font-bold">Studio</span>
+      </button>
+      <button class="bottom-nav-btn flex flex-col items-center justify-center flex-1 h-full text-on-surface-variant hover:text-on-surface transition-colors" data-target="analytics">
+        <span class="material-symbols-outlined text-[20px]">analytics</span>
+        <span class="text-[11px] font-code mt-0.5">Analytics</span>
+      </button>
+      <button class="bottom-nav-btn flex flex-col items-center justify-center flex-1 h-full text-on-surface-variant hover:text-on-surface transition-colors" data-target="pipeline">
+        <span class="material-symbols-outlined text-[20px]">tune</span>
+        <span class="text-[11px] font-code mt-0.5">Pipeline</span>
+      </button>
+      <button class="bottom-nav-btn flex flex-col items-center justify-center flex-1 h-full text-on-surface-variant hover:text-on-surface transition-colors" data-target="roadmap">
+        <span class="material-symbols-outlined text-[20px]">map</span>
+        <span class="text-[11px] font-code mt-0.5">Roadmap</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Toast Notification Overlay -->
+  <div class="fixed bottom-20 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-full bg-surface-container-highest border border-primary/30 text-on-surface text-xs font-code shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-2" id="toast">
+    <span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+    <span id="toast-text">Operation completed</span>
+  </div>
+
+  <!-- Unified Interactive Engine Logic -->
+  <script>
+    (function initUnifiedApp() {
+      // Elements
+      const rawTextarea = document.getElementById('raw-textarea');
+      const inputCharCount = document.getElementById('input-char-count');
+      const inputTokenCount = document.getElementById('input-token-count');
+      const outputTextBox = document.getElementById('output-text-box');
+      const noiseReductionStat = document.getElementById('noise-reduction-stat');
+      const statTokensKept = document.getElementById('stat-tokens-kept');
+      const statTokensDropped = document.getElementById('stat-tokens-dropped');
+      const statCompression = document.getElementById('stat-compression');
+      const tokenStreamContainer = document.getElementById('token-stream-container');
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toast-text');
+
+      const toggleLower = document.getElementById('toggle-lower');
+      const toggleUrls = document.getElementById('toggle-urls');
+      const togglePunct = document.getElementById('toggle-punct');
+      const toggleSymbols = document.getElementById('toggle-symbols');
+      const toggleStopwords = document.getElementById('toggle-stopwords');
+      const toggleNegation = document.getElementById('toggle-negation');
+
+      // Stop words dictionary
+      const defaultStopwords = new Set([
+        'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours', 
+        'he', 'him', 'his', 'himself', 'she', 'her', 'hers', 'its', 'itself', 'they', 'them', 
+        'their', 'what', 'which', 'who', 'whom', 'this', 'that', 'these', 'those', 'am', 'is', 
+        'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 
+        'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 
+        'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 
+        'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 
+        'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once'
+      ]);
+      const customStopwords = new Set(['college', 'exam', 'semester', 'syllabus', 'course', 'grade', 'lecturer', 'campus']);
+      const negationWords = new Set(['not', 'no', 'never', 'neither', 'nor', 'cannot']);
+
+      const samples = {
+        social: "Hey!!! I am learning NLP @college 😊, and this is AMAZING!!! Visit https://example.com",
+        review: "Product was NOT delivered on time! Terrible battery life, but customer support was ok...",
+        news: "BREAKING: Global emissions dropped by 4.2% in Q3 according to climate-reports.gov. Full analysis: https://news.net/eco"
+      };
+
+      // Tab Switching
+      const navButtons = document.querySelectorAll('.nav-tab-btn, .bottom-nav-btn');
+      const tabViews = {
+        studio: document.getElementById('view-studio'),
+        analytics: document.getElementById('view-analytics'),
+        pipeline: document.getElementById('view-pipeline'),
+        roadmap: document.getElementById('view-roadmap')
+      };
+      const headerActiveLabel = document.getElementById('header-active-view');
+
+      function switchTab(target) {
+        Object.keys(tabViews).forEach(tab => {
+          if (tab === target) {
+            tabViews[tab].classList.add('active');
+          } else {
+            tabViews[tab].classList.remove('active');
+          }
+        });
+
+        navButtons.forEach(btn => {
+          if (btn.getAttribute('data-target') === target) {
+            if (btn.classList.contains('nav-tab-btn')) {
+              btn.classList.add('text-primary', 'bg-surface-container-high');
+              btn.classList.remove('text-on-surface-variant');
+            } else {
+              btn.classList.add('text-primary', 'border-t-2', 'border-primary');
+              btn.classList.remove('text-on-surface-variant');
+            }
+          } else {
+            if (btn.classList.contains('nav-tab-btn')) {
+              btn.classList.remove('text-primary', 'bg-surface-container-high');
+              btn.classList.add('text-on-surface-variant');
+            } else {
+              btn.classList.remove('text-primary', 'border-t-2', 'border-primary');
+              btn.classList.add('text-on-surface-variant');
+            }
+          }
+        });
+
+        const titles = {
+          studio: 'Studio Module Active',
+          analytics: 'Real-Time Analytics Synced',
+          pipeline: 'Morphology Pipeline Active',
+          roadmap: 'Roadmap & Viva Tracker'
+        };
+        headerActiveLabel.textContent = titles[target] || 'Toolkit Active';
+      }
+
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-target');
+          switchTab(target);
+        });
+      });
+
+      document.getElementById('btn-switch-analytics').addEventListener('click', () => {
+        switchTab('analytics');
+      });
+
+      // Toast utility
+      function showToast(message) {
+        toastText.innerText = message;
+        toast.classList.remove('opacity-0', 'pointer-events-none');
+        toast.classList.add('opacity-100');
+        setTimeout(() => {
+          toast.classList.add('opacity-0', 'pointer-events-none');
+          toast.classList.remove('opacity-100');
+        }, 2200);
+      }
+
+      // Live processing pipeline
+      function processTextPipeline() {
+        let text = rawTextarea.value;
+        const initialCharCount = text.length;
+        inputCharCount.innerText = initialCharCount;
+
+        const rawWords = text.trim() ? text.trim().split(/\s+/) : [];
+        inputTokenCount.innerText = rawWords.length;
+
+        if (!text.trim()) {
+          outputTextBox.innerText = "(empty input stream)";
+          tokenStreamContainer.innerHTML = `<span class="text-xs text-on-surface-variant py-2">No tokens available.</span>`;
+          noiseReductionStat.innerText = "0% Noise";
+          statTokensKept.innerText = "0";
+          statTokensDropped.innerText = "0";
+          statCompression.innerText = "1.0x";
+          syncAnalytics([], 0, 0, "");
+          return;
+        }
+
+        // 1. Lowercase
+        if (toggleLower.checked) {
+          text = text.toLowerCase();
+        }
+
+        // 2. URLs
+        if (toggleUrls.checked) {
+          text = text.replace(/https?:\/\/\S+|www\.\S+/gi, '');
+        }
+
+        // 3. Symbols & Emojis
+        if (toggleSymbols.checked) {
+          text = text.replace(/[@#]/g, '');
+          text = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+        }
+
+        // 4. Punctuation
+        if (togglePunct.checked) {
+          text = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g, ' ');
+        }
+
+        // Split tokens
+        let tokens = text.split(/\s+/).filter(Boolean);
+
+        // 5. Stop words + Negation Guard
+        if (toggleStopwords.checked) {
+          tokens = tokens.filter(t => {
+            const lowerT = t.toLowerCase();
+            if (toggleNegation.checked && negationWords.has(lowerT)) {
+              return true;
+            }
+            if (defaultStopwords.has(lowerT) || customStopwords.has(lowerT)) {
+              return false;
+            }
+            return true;
+          });
+        }
+
+        const cleanedText = tokens.join(' ');
+        outputTextBox.innerText = cleanedText || "(all tokens sanitized)";
+
+        // Metrics
+        const cleanedCharCount = cleanedText.length;
+        const reduction = initialCharCount > 0 
+          ? Math.max(0, Math.round(((initialCharCount - cleanedCharCount) / initialCharCount) * 100))
+          : 0;
+
+        noiseReductionStat.innerText = `-${reduction}% Noise`;
+        statTokensKept.innerText = tokens.length;
+        statTokensDropped.innerText = Math.max(0, rawWords.length - tokens.length);
+        const compRatio = tokens.length > 0 ? (rawWords.length / tokens.length).toFixed(1) : "0.0";
+        statCompression.innerText = `${compRatio}x`;
+
+        // Render Tokens
+        renderTokens(tokens);
+
+        // Update Analytics Tab
+        syncAnalytics(tokens, rawWords.length, initialCharCount, rawTextarea.value);
+      }
+
+      function renderTokens(tokens) {
+        if (!tokens.length) {
+          tokenStreamContainer.innerHTML = `<span class="text-xs text-on-surface-variant py-2">Stream cleared of all tokens.</span>`;
+          return;
+        }
+
+        tokenStreamContainer.innerHTML = tokens.map((tok, i) => {
+          const idx = i.toString().padStart(2, '0');
+          return `
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high border border-surface-container-highest text-primary font-code text-xs flex-shrink-0 active:scale-95 transition-transform cursor-pointer hover:border-primary/50" onclick="alert('Token [${idx}]: ${tok}')">
+              <span class="text-[10px] text-on-surface-variant font-semibold">${idx}</span>
+              <span>${tok}</span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Synchronize Analytics
+      function syncAnalytics(tokens, rawCount, rawChars, rawString) {
+        document.getElementById('analytics-raw-words').textContent = rawCount;
+        document.getElementById('analytics-clean-tokens').textContent = tokens.length;
+        const pruned = Math.max(0, rawChars - tokens.join(' ').length);
+        document.getElementById('analytics-pruned-chars').innerHTML = `${pruned} <span class="text-xs text-on-surface-variant">chars</span>`;
+        
+        const redPct = rawChars > 0 ? Math.round((pruned / rawChars) * 100) : 0;
+        document.getElementById('analytics-reduction-badge').textContent = `-${redPct}%`;
+
+        // TTR
+        const uniqueSet = new Set(tokens);
+        const ttr = tokens.length > 0 ? (uniqueSet.size / tokens.length).toFixed(2) : "0.00";
+        document.getElementById('analytics-ttr').textContent = ttr;
+
+        // Frequencies
+        const freqMap = {};
+        tokens.forEach(t => {
+          freqMap[t] = (freqMap[t] || 0) + 1;
+        });
+
+        const sorted = Object.entries(freqMap).sort((a, b) => b[1] - a[1]);
+        const maxFreq = sorted.length > 0 ? sorted[0][1] : 1;
+
+        const freqContainer = document.getElementById('analytics-freq-bars');
+        if (!sorted.length) {
+          freqContainer.innerHTML = `<span class="text-xs text-on-surface-variant py-2">No frequency data available.</span>`;
+        } else {
+          freqContainer.innerHTML = sorted.slice(0, 6).map(([term, count]) => {
+            const pct = ((count / tokens.length) * 100).toFixed(1);
+            const barW = Math.round((count / maxFreq) * 100);
+            return `
+              <div class="flex flex-col space-y-1 bg-surface-container-low p-2 rounded-lg border border-surface-container-high/40 hover:bg-surface-container-high transition-colors cursor-pointer" onclick="showNotification('Inspecting term: ${term} (${count}x)')">
+                <div class="flex items-center justify-between text-xs font-code">
+                  <div class="flex items-center space-x-2">
+                    <span class="text-primary font-bold">${term}</span>
+                    <span class="text-[10px] text-on-surface-variant">TOKEN</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <span class="text-on-surface-variant">${pct}%</span>
+                    <span class="bg-primary text-on-primary text-[10px] px-1.5 py-0.2 rounded-full font-bold">${count}×</span>
+                  </div>
+                </div>
+                <div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-primary h-full rounded-full transition-all duration-500" style="width: ${barW}%;"></div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // Hapax Legomena
+        const hapax = sorted.filter(([_, count]) => count === 1).map(([term]) => term);
+        document.getElementById('analytics-hapax-count').textContent = `${hapax.length} terms`;
+        const hapaxTray = document.getElementById('analytics-hapax-tray');
+        if (!hapax.length) {
+          hapaxTray.innerHTML = `<span class="text-xs text-on-surface-variant">No singleton tokens found.</span>`;
+        } else {
+          hapaxTray.innerHTML = hapax.map(term => `
+            <span class="inline-flex items-center space-x-1 bg-surface-container-high text-on-surface px-2.5 py-1 rounded-md text-xs font-code border border-surface-container-highest">
+              <span>${term}</span>
+              <span class="text-tertiary font-bold ml-1">1×</span>
+            </span>
+          `).join('');
+        }
+
+        // Noise Pruning Audit
+        const urls = rawString.match(/https?:\/\/\S+|www\.\S+/gi) || [];
+        document.getElementById('audit-url-count').textContent = `${urls.length} link${urls.length === 1 ? '' : 's'}`;
+        document.getElementById('audit-url-chips').textContent = urls.length ? urls[0] : 'None detected';
+
+        const punct = rawString.match(/[^\w\s]/g) || [];
+        document.getElementById('audit-punct-count').textContent = `${punct.length} chars`;
+        const punctUnique = Array.from(new Set(punct)).slice(0, 4);
+        document.getElementById('audit-punct-chips').innerHTML = punctUnique.length
+          ? punctUnique.map(p => `<span class="text-xs font-code bg-surface-container-high text-primary px-1.5 py-0.5 rounded font-bold">${p}</span>`).join('')
+          : '<span class="text-xs text-on-surface-variant">None</span>';
+      }
+
+      window.showNotification = showToast;
+
+      // Listeners
+      rawTextarea.addEventListener('input', processTextPipeline);
+
+      [toggleLower, toggleUrls, togglePunct, toggleSymbols, toggleStopwords, toggleNegation].forEach(el => {
+        el.addEventListener('change', () => {
+          const activeCount = [toggleLower, toggleUrls, togglePunct, toggleSymbols, toggleStopwords, toggleNegation].filter(e => e.checked).length;
+          document.getElementById('active-transforms-count').textContent = `${activeCount}/6 Active`;
+          processTextPipeline();
+        });
+      });
+
+      document.getElementById('btn-process').addEventListener('click', () => {
+        processTextPipeline();
+        showToast('Pipeline execution converged');
+      });
+
+      // Sample Loaders
+      document.getElementById('sample-social').addEventListener('click', () => {
+        rawTextarea.value = samples.social;
+        processTextPipeline();
+        showToast('Loaded Social Tweet sample');
+      });
+
+      document.getElementById('sample-review').addEventListener('click', () => {
+        rawTextarea.value = samples.review;
+        processTextPipeline();
+        showToast('Loaded Product Review sample');
+      });
+
+      document.getElementById('sample-news').addEventListener('click', () => {
+        rawTextarea.value = samples.news;
+        processTextPipeline();
+        showToast('Loaded News sample');
+      });
+
+      document.getElementById('btn-clear').addEventListener('click', () => {
+        rawTextarea.value = '';
+        processTextPipeline();
+        showToast('Input buffer cleared');
+      });
+
+      document.getElementById('btn-paste').addEventListener('click', async () => {
+        try {
+          if (navigator.clipboard?.readText) {
+            const text = await navigator.clipboard.readText();
+            if (text) {
+              rawTextarea.value = text;
+              processTextPipeline();
+              showToast('Pasted from clipboard');
+              return;
+            }
+          }
+        } catch (e) {}
+        showToast('Clipboard ready');
+      });
+
+      document.getElementById('btn-copy').addEventListener('click', () => {
+        const txt = outputTextBox.innerText;
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(txt);
+          showToast('Sanitized payload copied!');
+        }
+      });
+
+      document.getElementById('btn-download').addEventListener('click', () => {
+        const text = outputTextBox.innerText;
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'cleaned_tokens.txt';
+        a.click();
+        showToast('Exported cleaned_tokens.txt');
+      });
+
+      // File upload for analytics
+      document.getElementById('analytics-file-input').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            rawTextarea.value = evt.target.result;
+            processTextPipeline();
+            switchTab('analytics');
+            showToast(`Loaded ${file.name} for analytics`);
+          };
+          reader.readAsText(file);
+        }
+      });
+
+      // Pipeline morphology dissector
+      const tokenChoiceBtns = document.querySelectorAll('.token-choice-btn');
+      tokenChoiceBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tokenChoiceBtns.forEach(b => {
+            b.classList.remove('border-primary/40', 'bg-surface-container-high');
+            b.classList.add('border-surface-container-high', 'bg-surface-container');
+          });
+          btn.classList.add('border-primary/40', 'bg-surface-container-high');
+          btn.classList.remove('border-surface-container-high', 'bg-surface-container');
+
+          const word = btn.getAttribute('data-word');
+          const stem = btn.getAttribute('data-stem');
+          const lemma = btn.getAttribute('data-lemma');
+          const pos = btn.getAttribute('data-pos');
+          const analysis = btn.getAttribute('data-analysis');
+
+          document.getElementById('disp-active-token').textContent = word;
+          document.getElementById('disp-active-pos').textContent = pos;
+          document.getElementById('disp-stem-output').textContent = stem;
+          document.getElementById('disp-lemma-output').textContent = lemma;
+          document.getElementById('disp-analysis-text').textContent = analysis;
+
+          const stemValidity = document.getElementById('disp-stem-validity');
+          if (stem === 'studi') {
+            stemValidity.textContent = 'Non-Word';
+            stemValidity.className = 'text-[10px] font-code px-1.5 py-0.5 rounded text-error bg-error/20';
+          } else {
+            stemValidity.textContent = 'Valid Dict';
+            stemValidity.className = 'text-[10px] font-code px-1.5 py-0.5 rounded text-tertiary bg-tertiary/20';
+          }
+        });
+      });
+
+      // Custom stop words manager
+      const stopWordsContainer = document.getElementById('stop-words-container');
+      function renderCustomStops() {
+        stopWordsContainer.innerHTML = Array.from(customStopwords).map(w => `
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-high text-on-surface font-code text-xs rounded-md border border-surface-container-highest">
+            <span>${w}</span>
+            <button type="button" class="text-outline hover:text-error" onclick="removeStop('${w}')">
+              <span class="material-symbols-outlined text-[13px]">close</span>
+            </button>
+          </span>
+        `).join('');
+        document.getElementById('stop-counter').textContent = `${customStopwords.size} Active`;
+      }
+
+      window.removeStop = function(word) {
+        customStopwords.delete(word);
+        renderCustomStops();
+        processTextPipeline();
+      };
+
+      document.getElementById('custom-stop-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const inp = document.getElementById('stop-input');
+        const val = inp.value.trim().toLowerCase();
+        if (val) {
+          customStopwords.add(val);
+          inp.value = '';
+          renderCustomStops();
+          processTextPipeline();
+          showToast(`Added stopword: "${val}"`);
+        }
+      });
+
+      document.getElementById('btn-reset-stops').addEventListener('click', () => {
+        ['college', 'exam', 'semester', 'syllabus', 'course', 'grade', 'lecturer', 'campus'].forEach(w => customStopwords.add(w));
+        renderCustomStops();
+        processTextPipeline();
+        showToast('Restored default custom stopwords');
+      });
+
+      // Copy Python snippet
+      document.getElementById('btn-copy-py').addEventListener('click', () => {
+        const code = document.getElementById('py-code-block').innerText;
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(code);
+          document.getElementById('copy-py-label').textContent = 'Copied!';
+          setTimeout(() => {
+            document.getElementById('copy-py-label').textContent = 'Copy Code';
+          }, 2000);
+          showToast('Copied nlp_pipeline.py');
+        }
+      });
+
+      // Roadmap export buttons
+      document.getElementById('btn-export-pdf').addEventListener('click', () => {
+        showToast('Generating Viva Academic Defense Report (PDF)...');
+      });
+
+      document.getElementById('btn-export-md').addEventListener('click', () => {
+        showToast('Exporting project presentation notes (.MD)...');
+      });
+
+      // Init run
+      renderCustomStops();
+      processTextPipeline();
+    })();
+  </script>
+</body>
+</html>

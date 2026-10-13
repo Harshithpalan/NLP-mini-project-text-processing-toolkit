@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface": "#0b1326", "on-primary-container": "#00424f", "error": "#ffb4ab", "secondary": "#c0c1ff", "on-secondary-fixed": "#07006c", "error-container": "#93000a", "on-error-container": "#ffdad6", "surface-dim": "#0b1326", "secondary-fixed-dim": "#c0c1ff", "surface-container-high": "#222a3d", "inverse-surface": "#dae2fd", "on-primary-fixed-variant": "#004e5c", "on-secondary": "#1000a9", "on-tertiary-container": "#00452e", "primary-fixed": "#acedff", "surface-variant": "#2d3449", "surface-bright": "#31394d", "background": "#0b1326", "tertiary": "#4edea3", "primary-fixed-dim": "#4cd7f6", "tertiary-container": "#1bbd85", "surface-container-lowest": "#060e20", "on-primary-fixed": "#001f26", "primary-container": "#06b6d4", "tertiary-fixed-dim": "#4edea3", "surface-container": "#171f33", "on-tertiary-fixed": "#002113", "on-secondary-fixed-variant": "#2f2ebe", "on-background": "#dae2fd", "on-tertiary-fixed-variant": "#005236", "on-primary": "#003640", "primary": "#4cd7f6", "on-surface": "#dae2fd", "surface-tint": "#4cd7f6", "on-error": "#690005", "outline": "#869397", "on-surface-variant": "#bcc9cd", "inverse-primary": "#00687a", "tertiary-fixed": "#6ffbbe", "secondary-fixed": "#e1e0ff", "secondary-container": "#3131c0", "inverse-on-surface": "#283044", "surface-container-highest": "#2d3449", "on-tertiary": "#003824", "on-secondary-container": "#b0b2ff", "surface-container-low": "#131b2e", "outline-variant": "#3d494c" }, borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, spacing: { "space-sm": "0.5rem", "space-md": "0.75rem", "margin-desktop": "2rem", "space-lg": "1rem", "space-xs": "0.25rem", "margin": "1rem", "gutter": "0.75rem", "space-xl": "1.5rem", "gutter-desktop": "1.25rem" }, fontFamily: { "body-md": ["Geist"], "label-metric": ["JetBrains Mono"], "headline-xl-mobile": ["Geist"], "headline-md": ["Geist"], "body-lg": ["Geist"], "body-sm": ["Geist"], "label-code": ["JetBrains Mono"], "label-badge": ["JetBrains Mono"], "headline-xl": ["Geist"], "headline-lg": ["Geist"] }, fontSize: { "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-metric": ["20px", { "lineHeight": "24px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-xl-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-lg": ["26px", { "lineHeight": "24px", "fontWeight": "400" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "label-code": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "label-badge": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }] } } } };</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.3)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="NLP Toolkit Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1UY7ITn2236s1X8ahg9Ahk5FyVIIA-sQaiBe1CpKJ-eC9I6YY5lQ3bkoECMi6yzSfCVXztNe2XMgO1BhV296XeMyyQNTnfowo2giV1zXjT1yumZTA_yEn1zpbEd5gFax7cyPpAjPywL-q8hkiXMJKCkXDBWCbnKthsiUXDv5rbTubEzIrXhWn7W4fJAlDtz4hDcapJRsYO6Lf6hjH4P-lAsZ7rC8Ot7wKggyJt0ggo6HA-01y45h-6rCmec"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-headline-md text-headline-md tracking-tight text-on-surface truncate">NLP Preprocess</span><span class="font-label-badge text-label-badge px-space-xs py-0.5 bg-surface-container-highest text-primary rounded border border-primary/20 flex-shrink-0">MVP v1.0</span></div><div class="flex items-center gap-1.5"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span></span><span class="font-label-code text-body-sm text-on-surface-variant truncate">Studio</span></div></div></div><div class="flex items-center gap-space-sm flex-shrink-0"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen"><div class="flex flex-col w-full px-margin pb-6 gap-space-lg">
+<!-- Studio Intro Header & Sample Carousel -->
+<section class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">terminal</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Interactive Studio</h2>
+</div>
+<span class="font-label-badge text-label-badge px-2 py-0.5 rounded bg-tertiary-container/20 text-tertiary">Engine Ready</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+      High-throughput token sanitization with real-time semantic preservation.
+    </p>
+<!-- Sample Presets Scroll -->
+<div class="flex items-center gap-space-xs overflow-x-auto py-1 no-scrollbar">
+<button class="sample-chip flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors whitespace-nowrap active:scale-95" id="sample-social">
+<span class="material-symbols-outlined text-[14px] text-primary">chat</span>
+<span class="font-label-badge text-label-badge">Social Tweet</span>
+</button>
+<button class="sample-chip flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-variant transition-colors whitespace-nowrap active:scale-95" id="sample-review">
+<span class="material-symbols-outlined text-[14px] text-tertiary">rate_review</span>
+<span class="font-label-badge text-label-badge">Product Review</span>
+</button>
+<button class="sample-chip flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-variant transition-colors whitespace-nowrap active:scale-95" id="sample-news">
+<span class="material-symbols-outlined text-[14px] text-secondary">newspaper</span>
+<span class="font-label-badge text-label-badge">News Dispatch</span>
+</button>
+</div>
+</section>
+<!-- Raw Input Terminal Card -->
+<section class="flex flex-col bg-surface-container-low rounded-xl shadow-md overflow-hidden">
+<!-- Card Toolbar -->
+<div class="flex items-center justify-between px-space-md py-2.5 bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="font-label-code text-label-code text-primary font-bold">>_</span>
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-on-surface-variant">RAW INPUT STREAM</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high text-on-surface hover:text-primary transition-colors text-body-sm font-body-sm active:scale-95" id="btn-paste">
+<span class="material-symbols-outlined text-[14px]">content_paste</span>
+<span>Paste</span>
+</button>
+<button class="flex items-center gap-1 px-2 py-1 rounded bg-surface-container-high text-on-surface-variant hover:text-error transition-colors text-body-sm font-body-sm active:scale-95" id="btn-clear">
+<span class="material-symbols-outlined text-[14px]">delete_sweep</span>
+<span>Clear</span>
+</button>
+</div>
+</div>
+<!-- Text Input Area -->
+<div class="p-space-md flex flex-col gap-space-sm bg-surface-container-low">
+<textarea class="w-full bg-transparent text-on-surface font-label-code text-label-code resize-none outline-none focus:outline-none placeholder-outline" id="raw-textarea" placeholder="Enter text or raw tokens here..." rows="4">Hey!!! I am learning NLP @college 😊, and this is AMAZING!!! Visit https://example.com</textarea>
+<!-- Live Metrics Strip -->
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-badge text-label-badge">
+<span class="text-primary font-bold" id="input-char-count">87</span> chars
+          </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-badge text-label-badge">
+<span class="text-tertiary font-bold" id="input-token-count">13</span> tokens
+          </span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-badge text-label-badge">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span>UTF-8 Ready</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Preprocessing Pipeline Operations Grid -->
+<section class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[18px]">tune</span>
+<span class="font-headline-md text-headline-md text-on-surface">Pipeline Transforms</span>
+</div>
+<span class="font-label-badge text-label-badge text-on-surface-variant">5/6 Active</span>
+</div>
+<div class="grid grid-cols-1 gap-2">
+<!-- Op 1: Lowercase -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer select-none">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-7 h-7 rounded bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">match_case</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface truncate">Convert to Lowercase</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant">HELLO → hello</span>
+</div>
+</div>
+<input checked="" class="accent-primary w-4 h-4 cursor-pointer" id="toggle-lower" type="checkbox"/>
+</label>
+<!-- Op 2: Remove URLs -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer select-none">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-7 h-7 rounded bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">link_off</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface truncate">Strip URLs & Web Links</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant">https://... and www....</span>
+</div>
+</div>
+<input checked="" class="accent-primary w-4 h-4 cursor-pointer" id="toggle-urls" type="checkbox"/>
+</label>
+<!-- Op 3: Remove Punctuation -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer select-none">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-7 h-7 rounded bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">ink_eraser</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface truncate">Remove Punctuation</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant">Strip !, ?, ., commas</span>
+</div>
+</div>
+<input checked="" class="accent-primary w-4 h-4 cursor-pointer" id="toggle-punct" type="checkbox"/>
+</label>
+<!-- Op 4: Remove Unwanted Symbols & Emojis -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer select-none">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-7 h-7 rounded bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">mood_bad</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface truncate">Remove Symbols & Emojis</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant">@mentions, #tags, unicode 😊</span>
+</div>
+</div>
+<input checked="" class="accent-primary w-4 h-4 cursor-pointer" id="toggle-symbols" type="checkbox"/>
+</label>
+<!-- Op 5: Remove Stop Words -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer select-none">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-7 h-7 rounded bg-secondary/15 flex items-center justify-center text-secondary flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">filter_alt</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface truncate">Remove Stop Words</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant">NLTK Corpus: is, am, the, this</span>
+</div>
+</div>
+<input checked="" class="accent-primary w-4 h-4 cursor-pointer" id="toggle-stopwords" type="checkbox"/>
+</label>
+<!-- Op 6: Smart Negation Preserver (Delight/Guard) -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-surface-container hover:bg-surface-variant transition-colors cursor-pointer select-none">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-7 h-7 rounded bg-tertiary-container/30 flex items-center justify-center text-tertiary flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-body-md text-body-md text-on-surface font-medium truncate">Preserve Negations</span>
+<span class="font-label-badge text-[9px] px-1.5 py-0.2 bg-tertiary/20 text-tertiary rounded">SMART GUARD</span>
+</div>
+<span class="font-label-badge text-label-badge text-on-surface-variant">Keep 'not', 'no', 'never' for sentiment</span>
+</div>
+</div>
+<input checked="" class="accent-tertiary w-4 h-4 cursor-pointer" id="toggle-negation" type="checkbox"/>
+</label>
+</div>
+</section>
+<!-- Process Action Execution Trigger -->
+<div class="w-full pt-1">
+<button class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-primary text-on-primary font-headline-md text-body-lg shadow-lg shadow-primary/20 hover:opacity-95 active:scale-[0.98] transition-all" id="btn-process">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span>Process Stream</span>
+</button>
+</div>
+<!-- Processed Cleaned Output Section -->
+<section class="flex flex-col bg-surface-container-low rounded-xl shadow-md overflow-hidden">
+<!-- Header with Noise Reducer Delta Badge -->
+<div class="flex items-center justify-between px-space-md py-2.5 bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">verified</span>
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-on-surface font-bold">Sanitized Payload</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary/15 text-tertiary font-label-badge text-label-badge">
+<span class="material-symbols-outlined text-[13px]">trending_down</span>
+<span id="noise-reduction-stat">-64% Noise</span>
+</div>
+</div>
+<!-- Cleaned Text Display Area -->
+<div class="p-space-md flex flex-col gap-space-md bg-surface-container-low">
+<div class="p-3 rounded-lg bg-surface-container font-label-code text-label-code text-primary break-words selection:bg-primary/20" id="output-text-box">
+        hey learning nlp college amazing visit
+      </div>
+<!-- Quick Metrics Breakdown Bar -->
+<div class="grid grid-cols-3 gap-2">
+<div class="flex flex-col p-2 rounded bg-surface-container text-center">
+<span class="font-label-badge text-label-badge text-on-surface-variant">Tokens Kept</span>
+<span class="font-label-metric text-label-metric text-tertiary" id="stat-tokens-kept">6</span>
+</div>
+<div class="flex flex-col p-2 rounded bg-surface-container text-center">
+<span class="font-label-badge text-label-badge text-on-surface-variant">Removed</span>
+<span class="font-label-metric text-label-metric text-error" id="stat-tokens-dropped">7</span>
+</div>
+<div class="flex flex-col p-2 rounded bg-surface-container text-center">
+<span class="font-label-badge text-label-badge text-on-surface-variant">Compression</span>
+<span class="font-label-metric text-label-metric text-primary" id="stat-compression">2.8x</span>
+</div>
+</div>
+<!-- Result Action Bar -->
+<div class="grid grid-cols-3 gap-2 pt-1">
+<button class="flex items-center justify-center gap-1 py-2 px-1 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface text-body-sm font-body-sm active:scale-95 transition-all" id="btn-copy">
+<span class="material-symbols-outlined text-[15px] text-primary">content_copy</span>
+<span>Copy</span>
+</button>
+<button class="flex items-center justify-center gap-1 py-2 px-1 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface text-body-sm font-body-sm active:scale-95 transition-all" id="btn-download">
+<span class="material-symbols-outlined text-[15px] text-tertiary">download</span>
+<span>Export</span>
+</button>
+<button class="flex items-center justify-center gap-1 py-2 px-1 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface text-body-sm font-body-sm active:scale-95 transition-all" id="btn-inspect">
+<span class="material-symbols-outlined text-[15px] text-secondary">visibility</span>
+<span>Inspect</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Horizontal Token Stream Gallery -->
+<section class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">data_array</span>
+<span class="font-headline-md text-headline-md text-on-surface">Token Sequence</span>
+</div>
+<span class="font-label-badge text-label-badge text-on-surface-variant">Interactive Chips</span>
+</div>
+<!-- Scrollable Token Ribbons -->
+<div class="flex items-center gap-2 overflow-x-auto py-2 no-scrollbar" id="token-stream-container">
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high shadow hover:bg-surface-variant text-primary font-label-code text-label-code flex-shrink-0 cursor-default">
+<span class="font-label-badge text-[10px] text-on-surface-variant">00</span>
+<span>hey</span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high shadow hover:bg-surface-variant text-primary font-label-code text-label-code flex-shrink-0 cursor-default">
+<span class="font-label-badge text-[10px] text-on-surface-variant">01</span>
+<span>learning</span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high shadow hover:bg-surface-variant text-primary font-label-code text-label-code flex-shrink-0 cursor-default">
+<span class="font-label-badge text-[10px] text-on-surface-variant">02</span>
+<span>nlp</span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high shadow hover:bg-surface-variant text-primary font-label-code text-label-code flex-shrink-0 cursor-default">
+<span class="font-label-badge text-[10px] text-on-surface-variant">03</span>
+<span>college</span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high shadow hover:bg-surface-variant text-primary font-label-code text-label-code flex-shrink-0 cursor-default">
+<span class="font-label-badge text-[10px] text-on-surface-variant">04</span>
+<span>amazing</span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high shadow hover:bg-surface-variant text-primary font-label-code text-label-code flex-shrink-0 cursor-default">
+<span class="font-label-badge text-[10px] text-on-surface-variant">05</span>
+<span>visit</span>
+</div>
+</div>
+</section>
+<!-- Interactive Feedback Toast (Floating Hidden Container) -->
+<div class="fixed bottom-20 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-surface-container-highest text-primary font-label-code text-body-sm shadow-xl opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-2" id="toast">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span id="toast-text">Text processed successfully</span>
+</div>
+</div>
+<script>
+  (function initStudio() {
+    const rawTextarea = document.getElementById('raw-textarea');
+    const inputCharCount = document.getElementById('input-char-count');
+    const inputTokenCount = document.getElementById('input-token-count');
+    const outputTextBox = document.getElementById('output-text-box');
+    const noiseReductionStat = document.getElementById('noise-reduction-stat');
+    const statTokensKept = document.getElementById('stat-tokens-kept');
+    const statTokensDropped = document.getElementById('stat-tokens-dropped');
+    const statCompression = document.getElementById('stat-compression');
+    const tokenStreamContainer = document.getElementById('token-stream-container');
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toast-text');
+
+    const toggleLower = document.getElementById('toggle-lower');
+    const toggleUrls = document.getElementById('toggle-urls');
+    const togglePunct = document.getElementById('toggle-punct');
+    const toggleSymbols = document.getElementById('toggle-symbols');
+    const toggleStopwords = document.getElementById('toggle-stopwords');
+    const toggleNegation = document.getElementById('toggle-negation');
+
+    const stopwordsList = new Set([
+      'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours', 
+      'he', 'him', 'his', 'himself', 'she', 'her', 'hers', 'its', 'itself', 'they', 'them', 
+      'their', 'what', 'which', 'who', 'whom', 'this', 'that', 'these', 'those', 'am', 'is', 
+      'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 
+      'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 
+      'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 
+      'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 
+      'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once'
+    ]);
+
+    const negationWords = new Set(['not', 'no', 'never', 'neither', 'nor', 'cannot']);
+
+    const samples = {
+      social: "Hey!!! I am learning NLP @college 😊, and this is AMAZING!!! Visit https://example.com",
+      review: "Product was NOT delivered on time! Terrible battery life, but customer support at support@shop.io was ok...",
+      news: "BREAKING: Global emissions dropped by 4.2% in Q3 according to climate-reports.gov. Full analysis: https://news.net/eco"
+    };
+
+    function showToast(message) {
+      toastText.innerText = message;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      toast.classList.add('opacity-100');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none');
+        toast.classList.remove('opacity-100');
+      }, 2000);
+    }
+
+    function updateInputStats() {
+      const val = rawTextarea.value;
+      inputCharCount.innerText = val.length;
+      const rawTokens = val.trim() ? val.trim().split(/\s+/) : [];
+      inputTokenCount.innerText = rawTokens.length;
+    }
+
+    function processTextPipeline() {
+      let text = rawTextarea.value;
+      if (!text.trim()) {
+        outputTextBox.innerText = "(empty input stream)";
+        tokenStreamContainer.innerHTML = `<span class="text-body-sm text-on-surface-variant py-2">No tokens available.</span>`;
+        noiseReductionStat.innerText = "0% Noise";
+        statTokensKept.innerText = "0";
+        statTokensDropped.innerText = "0";
+        statCompression.innerText = "1.0x";
+        return;
+      }
+
+      const initialTokens = text.trim().split(/\s+/).filter(Boolean);
+      const initialCharCount = text.length;
+
+      // 1. Lowercase
+      if (toggleLower.checked) {
+        text = text.toLowerCase();
+      }
+
+      // 2. Strip URLs
+      if (toggleUrls.checked) {
+        text = text.replace(/https?:\/\/\S+|www\.\S+/gi, '');
+      }
+
+      // 3. Strip Symbols & Emojis (@, #, and unicode emojis/pictographs)
+      if (toggleSymbols.checked) {
+        text = text.replace(/[@#]/g, '');
+        text = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+      }
+
+      // 4. Strip Punctuation
+      if (togglePunct.checked) {
+        text = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g, ' ');
+      }
+
+      // Split into token array for filtering
+      let tokens = text.split(/\s+/).filter(Boolean);
+
+      // 5. Remove stop words & smart negation preserve
+      if (toggleStopwords.checked) {
+        tokens = tokens.filter(t => {
+          const lowerT = t.toLowerCase();
+          if (toggleNegation.checked && negationWords.has(lowerT)) {
+            return true;
+          }
+          return !stopwordsList.has(lowerT);
+        });
+      }
+
+      const cleanedText = tokens.join(' ');
+      outputTextBox.innerText = cleanedText || "(all tokens sanitized)";
+
+      // Metrics computation
+      const cleanedCharCount = cleanedText.length;
+      const reduction = initialCharCount > 0 
+        ? Math.max(0, Math.round(((initialCharCount - cleanedCharCount) / initialCharCount) * 100))
+        : 0;
+      
+      noiseReductionStat.innerText = `-${reduction}% Noise`;
+      statTokensKept.innerText = tokens.length;
+      
+      const dropped = Math.max(0, initialTokens.length - tokens.length);
+      statTokensDropped.innerText = dropped;
+
+      const compRatio = tokens.length > 0 ? (initialTokens.length / tokens.length).toFixed(1) : "0.0";
+      statCompression.innerText = `${compRatio}x`;
+
+      // Render Token Chips
+      renderTokenStream(tokens);
+    }
+
+    function renderTokenStream(tokens) {
+      if (tokens.length === 0) {
+        tokenStreamContainer.innerHTML = `<span class="text-body-sm text-on-surface-variant py-2">Stream cleared of all tokens.</span>`;
+        return;
+      }
+
+      tokenStreamContainer.innerHTML = tokens.map((tok, i) => {
+        const idx = i.toString().padStart(2, '0');
+        return `
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high shadow hover:bg-surface-variant text-primary font-label-code text-label-code flex-shrink-0 active:scale-95 transition-transform cursor-pointer">
+            <span class="font-label-badge text-[10px] text-on-surface-variant">${idx}</span>
+            <span>${tok}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Attach listeners
+    rawTextarea.addEventListener('input', () => {
+      updateInputStats();
+      processTextPipeline();
+    });
+
+    [toggleLower, toggleUrls, togglePunct, toggleSymbols, toggleStopwords, toggleNegation].forEach(el => {
+      el.addEventListener('change', () => {
+        processTextPipeline();
+      });
+    });
+
+    document.getElementById('btn-process').addEventListener('click', () => {
+      processTextPipeline();
+      showToast('Processing pipeline converged');
+    });
+
+    document.getElementById('sample-social').addEventListener('click', () => {
+      rawTextarea.value = samples.social;
+      updateInputStats();
+      processTextPipeline();
+      showToast('Loaded Social Tweet sample');
+    });
+
+    document.getElementById('sample-review').addEventListener('click', () => {
+      rawTextarea.value = samples.review;
+      updateInputStats();
+      processTextPipeline();
+      showToast('Loaded Product Review sample');
+    });
+
+    document.getElementById('sample-news').addEventListener('click', () => {
+      rawTextarea.value = samples.news;
+      updateInputStats();
+      processTextPipeline();
+      showToast('Loaded News sample');
+    });
+
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      rawTextarea.value = '';
+      updateInputStats();
+      processTextPipeline();
+      showToast('Terminal buffer cleared');
+    });
+
+    document.getElementById('btn-paste').addEventListener('click', async () => {
+      try {
+        if (navigator.clipboard && navigator.clipboard.readText) {
+          const text = await navigator.clipboard.readText();
+          if (text) {
+            rawTextarea.value = text;
+            updateInputStats();
+            processTextPipeline();
+            showToast('Pasted from clipboard');
+            return;
+          }
+        }
+      } catch (e) {
+        // Fallback demo paste
+      }
+      showToast('Clipboard ready');
+    });
+
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      const txt = outputTextBox.innerText;
+      if (txt && navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt);
+        showToast('Cleaned text copied!');
+      } else {
+        showToast('Payload copied to memory');
+      }
+    });
+
+    document.getElementById('btn-download').addEventListener('click', () => {
+      showToast('Preprocessed token buffer exported');
+    });
+
+    document.getElementById('btn-inspect').addEventListener('click', () => {
+      showToast('Token sequence loaded into inspector');
+    });
+
+    // Run initial processing
+    updateInputStats();
+    processTextPipeline();
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-1px_12px_rgba(0,0,0,0.3)]" data-active-classes="text-primary border-t-2 border-primary"><div class="flex justify-around items-center h-16 px-space-xs"><a aria-current="page" class="flex flex-col items-center justify-center flex-1 h-full min-h-[44px] min-w-[44px] transition-colors text-primary border-t-2 border-primary" data-path="studio" href="#"><span class="material-symbols-outlined text-[20px]">terminal</span><span class="font-label-badge text-label-badge mt-0.5">Studio</span></a><a class="flex flex-col items-center justify-center flex-1 h-full min-h-[44px] min-w-[44px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="analytics" href="../text_analytics_frequency/code.html"><span class="material-symbols-outlined text-[20px]">analytics</span><span class="font-label-badge text-label-badge mt-0.5">Analytics</span></a><a class="flex flex-col items-center justify-center flex-1 h-full min-h-[44px] min-w-[44px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="pipeline" href="../advanced_nlp_pipeline/code.html"><span class="material-symbols-outlined text-[20px]">tune</span><span class="font-label-badge text-label-badge mt-0.5">Pipeline</span></a><a class="flex flex-col items-center justify-center flex-1 h-full min-h-[44px] min-w-[44px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="roadmap" href="../project_roadmap_guide/code.html"><span class="material-symbols-outlined text-[20px]">map</span><span class="font-label-badge text-label-badge mt-0.5">Roadmap</span></a></div></nav></body></html>

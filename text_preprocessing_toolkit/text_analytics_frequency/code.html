@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface": "#0b1326", "on-primary-container": "#00424f", "error": "#ffb4ab", "secondary": "#c0c1ff", "on-secondary-fixed": "#07006c", "error-container": "#93000a", "on-error-container": "#ffdad6", "surface-dim": "#0b1326", "secondary-fixed-dim": "#c0c1ff", "surface-container-high": "#222a3d", "inverse-surface": "#dae2fd", "on-primary-fixed-variant": "#004e5c", "on-secondary": "#1000a9", "on-tertiary-container": "#00452e", "primary-fixed": "#acedff", "surface-variant": "#2d3449", "surface-bright": "#31394d", "background": "#0b1326", "tertiary": "#4edea3", "primary-fixed-dim": "#4cd7f6", "tertiary-container": "#1bbd85", "surface-container-lowest": "#060e20", "on-primary-fixed": "#001f26", "primary-container": "#06b6d4", "tertiary-fixed-dim": "#4edea3", "surface-container": "#171f33", "on-tertiary-fixed": "#002113", "on-secondary-fixed-variant": "#2f2ebe", "on-background": "#dae2fd", "on-tertiary-fixed-variant": "#005236", "on-primary": "#003640", "primary": "#4cd7f6", "on-surface": "#dae2fd", "surface-tint": "#4cd7f6", "on-error": "#690005", "outline": "#869397", "on-surface-variant": "#bcc9cd", "inverse-primary": "#00687a", "tertiary-fixed": "#6ffbbe", "secondary-fixed": "#e1e0ff", "secondary-container": "#3131c0", "inverse-on-surface": "#283044", "surface-container-highest": "#2d3449", "on-tertiary": "#003824", "on-secondary-container": "#b0b2ff", "surface-container-low": "#131b2e", "outline-variant": "#3d494c" }, borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, spacing: { "space-sm": "0.5rem", "space-md": "0.75rem", "margin-desktop": "2rem", "space-lg": "1rem", "space-xs": "0.25rem", "margin": "1rem", "gutter": "0.75rem", "space-xl": "1.5rem", "gutter-desktop": "1.25rem" }, fontFamily: { "body-md": ["Geist"], "label-metric": ["JetBrains Mono"], "headline-xl-mobile": ["Geist"], "headline-md": ["Geist"], "body-lg": ["Geist"], "body-sm": ["Geist"], "label-code": ["JetBrains Mono"], "label-badge": ["JetBrains Mono"], "headline-xl": ["Geist"], "headline-lg": ["Geist"] }, fontSize: { "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-metric": ["20px", { "lineHeight": "24px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-xl-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-lg": ["26px", { "lineHeight": "24px", "fontWeight": "400" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "label-code": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "label-badge": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }] } } } };</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.3)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="NLP Toolkit Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1UY7ITn2236s1X8ahg9Ahk5FyVIIA-sQaiBe1CpKJ-eC9I6YY5lQ3bkoECMi6yzSfCVXztNe2XMgO1BhV296XeMyyQNTnfowo2giV1zXjT1yumZTA_yEn1zpbEd5gFax7cyPpAjPywL-q8hkiXMJKCkXDBWCbnKthsiUXDv5rbTubEzIrXhWn7W4fJAlDtz4hDcapJRsYO6Lf6hjH4P-lAsZ7rC8Ot7wKggyJt0ggo6HA-01y45h-6rCmec"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-headline-md text-headline-md tracking-tight text-on-surface truncate">NLP Preprocess</span><span class="font-label-badge text-label-badge px-space-xs py-0.5 bg-surface-container-highest text-primary rounded border border-primary/20 flex-shrink-0">MVP v1.0</span></div><div class="flex items-center gap-1.5"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span></span><span class="font-label-code text-body-sm text-on-surface-variant truncate">Analytics</span></div></div></div><div class="flex items-center gap-space-sm flex-shrink-0"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen"><div class="flex flex-col w-full px-margin py-space-md space-y-space-lg">
+<!-- Pipeline Run Status Context -->
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-sm rounded-xl">
+<div class="flex items-center space-x-space-sm min-w-0">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary shadow-[0_0_8px_rgba(78,222,163,0.7)]"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-badge text-label-badge text-tertiary uppercase tracking-wider truncate">Execution Synced</span>
+<span class="font-label-code text-body-sm text-on-surface-variant truncate">Session ID #NLP-9048-X2</span>
+</div>
+</div>
+<div class="flex items-center space-x-1.5 bg-surface-container px-space-sm py-1 rounded-full">
+<span class="material-symbols-outlined text-[14px] text-primary">timer</span>
+<span class="font-label-code text-body-sm text-primary">12.4ms</span>
+</div>
+</div>
+<!-- Metric Overview Bento Grid (2x2) -->
+<div class="grid grid-cols-2 gap-space-sm">
+<!-- Stat 1: Raw Word Count -->
+<div class="bg-surface-container rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden group">
+<div class="flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">Raw Words</span>
+<span class="material-symbols-outlined text-primary text-[18px]">notes</span>
+</div>
+<div class="mt-space-md">
+<div class="font-label-metric text-label-metric text-on-surface tracking-tight">14</div>
+<div class="flex items-center mt-1 space-x-1">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tokens parsed</span>
+</div>
+</div>
+</div>
+<!-- Stat 2: Cleaned Token Payload -->
+<div class="bg-surface-container rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">Clean Tokens</span>
+<span class="bg-primary-container/20 text-primary font-label-badge text-label-badge px-1.5 py-0.5 rounded-full font-bold">-57.1%</span>
+</div>
+<div class="mt-space-md">
+<div class="font-label-metric text-label-metric text-primary tracking-tight">6</div>
+<div class="flex items-center mt-1 space-x-1">
+<span class="font-body-sm text-body-sm text-tertiary">Normalized state</span>
+</div>
+</div>
+</div>
+<!-- Stat 3: Characters Pruned -->
+<div class="bg-surface-container rounded-xl p-space-md flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">Pruned Noise</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">cleaning_services</span>
+</div>
+<div class="mt-space-md">
+<div class="font-label-metric text-label-metric text-secondary tracking-tight">48 <span class="text-body-sm font-body-sm text-on-surface-variant">chars</span></div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-1 truncate">Noise filtered</div>
+</div>
+</div>
+<!-- Stat 4: Type-Token Ratio -->
+<div class="bg-surface-container rounded-xl p-space-md flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">Lexical TTR</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">donut_small</span>
+</div>
+<div class="mt-space-md">
+<div class="font-label-metric text-label-metric text-tertiary tracking-tight">1.00</div>
+<div class="font-body-sm text-body-sm text-tertiary-fixed-dim mt-1 font-medium">Unique Diversity</div>
+</div>
+</div>
+</div>
+<!-- Real-Time Top Term Frequencies (Interactive Bar Inspector) -->
+<div class="bg-surface-container rounded-xl p-space-md shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">bar_chart</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Term Frequencies</h2>
+</div>
+<span class="font-label-badge text-label-badge text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full">Top 10 Lemmatized</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+      Calculated distribution across sanitized token sequences. Tap a term to toggle contextual weights.
+    </p>
+<!-- Frequency Bars Visualizer -->
+<div class="space-y-space-sm pt-space-xs" id="freqContainer">
+<!-- Item 1: nlp (4) -->
+<div class="term-bar-item flex flex-col space-y-1 bg-surface-container-low p-2 rounded-lg cursor-pointer hover:bg-surface-container-high transition-colors" data-count="4" data-term="nlp">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-label-code text-label-code text-primary font-bold">nlp</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant">NOUN / STEM</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="font-label-code text-body-sm text-on-surface-variant">22.2%</span>
+<span class="bg-primary text-on-primary font-label-badge text-label-badge px-2 py-0.5 rounded-full">4×</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+</div>
+</div>
+<!-- Item 2: learning (3) -->
+<div class="term-bar-item flex flex-col space-y-1 bg-surface-container-low p-2 rounded-lg cursor-pointer hover:bg-surface-container-high transition-colors" data-count="3" data-term="learning">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-label-code text-label-code text-on-surface font-semibold">learning</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant">VERB_PART</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="font-label-code text-body-sm text-on-surface-variant">16.7%</span>
+<span class="bg-surface-container-highest text-primary-fixed font-label-badge text-label-badge px-2 py-0.5 rounded-full">3×</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full transition-all duration-500" style="width: 75%;"></div>
+</div>
+</div>
+<!-- Item 3: college (2) -->
+<div class="term-bar-item flex flex-col space-y-1 bg-surface-container-low p-2 rounded-lg cursor-pointer hover:bg-surface-container-high transition-colors" data-count="2" data-term="college">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-label-code text-label-code text-on-surface font-semibold">college</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant">NOUN_PROP</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="font-label-code text-body-sm text-on-surface-variant">11.1%</span>
+<span class="bg-surface-container-highest text-secondary font-label-badge text-label-badge px-2 py-0.5 rounded-full">2×</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full transition-all duration-500" style="width: 50%;"></div>
+</div>
+</div>
+<!-- Item 4: amazing (2) -->
+<div class="term-bar-item flex flex-col space-y-1 bg-surface-container-low p-2 rounded-lg cursor-pointer hover:bg-surface-container-high transition-colors" data-count="2" data-term="amazing">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-label-code text-label-code text-on-surface font-semibold">amazing</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant">ADJ</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="font-label-code text-body-sm text-on-surface-variant">11.1%</span>
+<span class="bg-surface-container-highest text-secondary font-label-badge text-label-badge px-2 py-0.5 rounded-full">2×</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full transition-all duration-500" style="width: 50%;"></div>
+</div>
+</div>
+<!-- Item 5: toolkit (2) -->
+<div class="term-bar-item flex flex-col space-y-1 bg-surface-container-low p-2 rounded-lg cursor-pointer hover:bg-surface-container-high transition-colors" data-count="2" data-term="toolkit">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-label-code text-label-code text-on-surface font-semibold">toolkit</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant">NOUN</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="font-label-code text-body-sm text-on-surface-variant">11.1%</span>
+<span class="bg-surface-container-highest text-secondary font-label-badge text-label-badge px-2 py-0.5 rounded-full">2×</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full transition-all duration-500" style="width: 50%;"></div>
+</div>
+</div>
+<!-- Single Frequency Tail Tray -->
+<div class="pt-space-xs">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">Hapax Legomena (Freq: 1)</span>
+<span class="font-label-code text-body-sm text-tertiary">5 terms (5.6% ea)</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<span class="inline-flex items-center space-x-1 bg-surface-container-high text-on-surface px-2.5 py-1 rounded-md text-label-code font-label-code">
+<span>preprocess</span>
+<span class="text-tertiary font-bold ml-1">1×</span>
+</span>
+<span class="inline-flex items-center space-x-1 bg-surface-container-high text-on-surface px-2.5 py-1 rounded-md text-label-code font-label-code">
+<span>token</span>
+<span class="text-tertiary font-bold ml-1">1×</span>
+</span>
+<span class="inline-flex items-center space-x-1 bg-surface-container-high text-on-surface px-2.5 py-1 rounded-md text-label-code font-label-code">
+<span>sentiment</span>
+<span class="text-tertiary font-bold ml-1">1×</span>
+</span>
+<span class="inline-flex items-center space-x-1 bg-surface-container-high text-on-surface px-2.5 py-1 rounded-md text-label-code font-label-code">
+<span>regex</span>
+<span class="text-tertiary font-bold ml-1">1×</span>
+</span>
+<span class="inline-flex items-center space-x-1 bg-surface-container-high text-on-surface px-2.5 py-1 rounded-md text-label-code font-label-code">
+<span>python</span>
+<span class="text-tertiary font-bold ml-1">1×</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Noise Reduction Diagnostic Breakdown -->
+<div class="bg-surface-container rounded-xl p-space-md shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">filter_alt</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Noise Pruning Audit</h2>
+</div>
+<span class="font-label-badge text-label-badge text-secondary bg-secondary-container/20 px-2 py-0.5 rounded-full">4 Pipeline Passes</span>
+</div>
+<div class="space-y-space-sm">
+<!-- Stopwords -->
+<div class="bg-surface-container-low rounded-xl p-space-sm space-y-1.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-tertiary text-[16px]">visibility_off</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">Stop-words Stripped</span>
+</div>
+<span class="bg-surface-container-high text-tertiary font-label-badge text-label-badge px-2 py-0.5 rounded">4 matched</span>
+</div>
+<div class="flex flex-wrap gap-1">
+<span class="font-label-code text-body-sm bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded">"i"</span>
+<span class="font-label-code text-body-sm bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded">"am"</span>
+<span class="font-label-code text-body-sm bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded">"and"</span>
+<span class="font-label-code text-body-sm bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded">"this"</span>
+</div>
+</div>
+<!-- Punctuation -->
+<div class="bg-surface-container-low rounded-xl p-space-sm space-y-1.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary text-[16px]">code_blocks</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">Punctuation Purged</span>
+</div>
+<span class="bg-surface-container-high text-primary font-label-badge text-label-badge px-2 py-0.5 rounded">6 characters</span>
+</div>
+<div class="flex flex-wrap gap-1">
+<span class="font-label-code text-body-sm bg-surface-container-highest text-primary-fixed-dim px-2 py-0.5 rounded font-bold">"!"</span>
+<span class="font-label-code text-body-sm bg-surface-container-highest text-primary-fixed-dim px-2 py-0.5 rounded font-bold">"@"</span>
+<span class="font-label-code text-body-sm bg-surface-container-highest text-primary-fixed-dim px-2 py-0.5 rounded font-bold">","</span>
+<span class="font-label-code text-body-sm text-on-surface-variant px-1.5 py-0.5">+ 3 repeat marks</span>
+</div>
+</div>
+<!-- URLs -->
+<div class="bg-surface-container-low rounded-xl p-space-sm space-y-1.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">link_off</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">URLs Sanitized</span>
+</div>
+<span class="bg-surface-container-high text-secondary font-label-badge text-label-badge px-2 py-0.5 rounded">1 link</span>
+</div>
+<div class="flex items-center bg-surface-container-highest px-2 py-1 rounded max-w-full overflow-hidden">
+<span class="material-symbols-outlined text-[14px] text-secondary mr-1 flex-shrink-0">public_off</span>
+<span class="font-label-code text-body-sm text-secondary truncate">https://example.com</span>
+</div>
+</div>
+<!-- Emojis & Symbols -->
+<div class="bg-surface-container-low rounded-xl p-space-sm space-y-1.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-error text-[16px]">sentiment_satisfied</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">Unicode Symbols Filtered</span>
+</div>
+<span class="bg-surface-container-high text-error font-label-badge text-label-badge px-2 py-0.5 rounded">1 glyph</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="inline-flex items-center justify-center bg-surface-container-highest w-7 h-7 rounded text-body-lg">😊</span>
+<span class="font-label-code text-body-sm text-on-surface-variant">U+1F60A (Smiling Face)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Batch Corpus & CSV Analyzer Teaser Card -->
+<div class="relative bg-surface-container-high rounded-xl p-space-lg shadow-md overflow-hidden space-y-space-md">
+<!-- Subtle glow ornament -->
+<div class="absolute -right-10 -bottom-10 w-40 h-40 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-start justify-between">
+<div class="space-y-1">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary text-[20px]">dataset</span>
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-primary">Scalable Ingestion</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Batch Corpus Frequency</h3>
+</div>
+<div class="bg-surface-container-highest text-tertiary font-label-badge text-label-badge px-2 py-1 rounded-full">
+        CSV / Parquet
+      </div>
+</div>
+<!-- Quick Micro Preview Demo Mockup -->
+<div class="bg-surface-container-lowest rounded-lg p-space-sm space-y-2">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-code text-body-sm flex items-center space-x-1">
+<span class="material-symbols-outlined text-[14px]">table_rows</span>
+<span>sample_training_corpus.csv</span>
+</span>
+<span class="font-label-badge text-label-badge text-tertiary">34,120 rows</span>
+</div>
+<!-- Mini Mock Table Headers -->
+<div class="grid grid-cols-3 gap-1 bg-surface-container px-2 py-1 rounded font-label-badge text-label-badge text-on-surface-variant">
+<span>doc_id</span>
+<span>tokens</span>
+<span class="text-right">entropy</span>
+</div>
+<div class="grid grid-cols-3 gap-1 px-2 py-0.5 font-label-code text-body-sm text-on-surface">
+<span class="truncate text-on-surface-variant">#9821</span>
+<span class="truncate text-primary">1,402 tok</span>
+<span class="text-right text-tertiary">0.94</span>
+</div>
+<div class="grid grid-cols-3 gap-1 px-2 py-0.5 font-label-code text-body-sm text-on-surface opacity-75">
+<span class="truncate text-on-surface-variant">#9822</span>
+<span class="truncate text-primary">843 tok</span>
+<span class="text-right text-tertiary">0.89</span>
+</div>
+</div>
+<!-- Action Prompt and Button -->
+<div class="space-y-space-sm pt-1">
+<button class="w-full bg-primary hover:bg-primary-container text-on-primary py-space-sm px-space-md rounded-lg font-headline-md text-body-md flex items-center justify-center space-x-2 transition-all active:scale-[0.98] shadow-sm" id="uploadCsvBtn">
+<span class="material-symbols-outlined text-[18px]">upload_file</span>
+<span>Upload CSV for Batch Frequency Analysis</span>
+</button>
+<div class="flex items-center justify-center space-x-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px] text-tertiary">verified_user</span>
+<span class="font-body-sm text-body-sm">Processes fully in-browser via WebAssembly tokenizers</span>
+</div>
+</div>
+</div>
+<!-- Toast Notification Overlay for Local Feedback -->
+<div class="fixed bottom-20 left-4 right-4 bg-surface-container-highest text-on-surface py-2.5 px-4 rounded-xl shadow-xl flex items-center justify-between opacity-0 pointer-events-none transition-opacity duration-300 z-40" id="inspectorToast">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+<span class="font-body-md text-body-md" id="toastMessage">Term inspection active</span>
+</div>
+<span class="font-label-code text-body-sm text-tertiary">OK</span>
+</div>
+</div>
+<script>
+  // Simple micro-interactions for interactive feedback
+  const termBars = document.querySelectorAll('.term-bar-item');
+  const toast = document.getElementById('inspectorToast');
+  const toastMsg = document.getElementById('toastMessage');
+  const uploadBtn = document.getElementById('uploadCsvBtn');
+
+  function showToast(message) {
+    if (!toast) return;
+    toastMsg.textContent = message;
+    toast.classList.remove('opacity-0', 'pointer-events-none');
+    toast.classList.add('opacity-100');
+    setTimeout(() => {
+      toast.classList.add('opacity-0', 'pointer-events-none');
+      toast.classList.remove('opacity-100');
+    }, 2200);
+  }
+
+  termBars.forEach(item => {
+    item.addEventListener('click', () => {
+      const term = item.getAttribute('data-term');
+      const count = item.getAttribute('data-count');
+      showToast(`Selected "${term}" (${count} occurrences)`);
+    });
+  });
+
+  if (uploadBtn) {
+    uploadBtn.addEventListener('click', () => {
+      showToast('Opening native file picker for CSV/Parquet...');
+    });
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-1px_12px_rgba(0,0,0,0.3)]" data-active-classes="text-primary border-t-2 border-primary"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center flex-1 h-full min-h-[44px] min-w-[44px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="studio" href="../preprocessing_studio/code.html"><span class="material-symbols-outlined text-[20px]">terminal</span><span class="font-label-badge text-label-badge mt-0.5">Studio</span></a><a aria-current="page" class="flex flex-col items-center justify-center flex-1 h-full min-h-[44px] min-w-[44px] transition-colors text-primary border-t-2 border-primary" data-path="analytics" href="#"><span class="material-symbols-outlined text-[20px]">analytics</span><span class="font-label-badge text-label-badge mt-0.5">Analytics</span></a><a class="flex flex-col items-center justify-center flex-1 h-full min-h-[44px] min-w-[44px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="pipeline" href="../advanced_nlp_pipeline/code.html"><span class="material-symbols-outlined text-[20px]">tune</span><span class="font-label-badge text-label-badge mt-0.5">Pipeline</span></a><a class="flex flex-col items-center justify-center flex-1 h-full min-h-[44px] min-w-[44px] text-on-surface-variant hover:text-on-surface transition-colors" data-path="roadmap" href="../project_roadmap_guide/code.html"><span class="material-symbols-outlined text-[20px]">map</span><span class="font-label-badge text-label-badge mt-0.5">Roadmap</span></a></div></nav></body></html>
